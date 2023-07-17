@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+#searchingForDirector .progress-bar {
+    width: 100%;
+    background: rgb(47, 47, 47);
+    /* background-image: linear-gradient(to right, rgb(189, 189, 189) 50%, rgb(43, 43, 43) 50%); */
+}
+#searchingForDirector .progress-bar .bar {
+    width: 0%;
+    height: 3px;
+    margin-bottom: 10px;
+    background: rgb(189, 189, 189);
+    transition: width 0.4s;
+}
+iframe {
+    border: solid 1px black;
+    width: 80%;
+    margin-left: 10%;
+    height: 500px;
+}
+
+#miniAlerts {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    width: calc(150px + 15%);
+    min-width: 150px;
+}
+#miniAlerts .alert {
+    position: relative;
+    padding: 8px;
+    background: grey;
+}
+#miniAlerts .alert .message {
+    width: fit-content;
+}
+#miniAlerts .alert .close-x {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+#miniAlerts .alert:not(.active) {
+    display: none;
+}

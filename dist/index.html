@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director Site - Test Vidlium</title>
+    
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <h1>Director Site</h1>
+    <h2>This is a test to see that netlify is working</h2>
+    <p>V1.2</p>
+    <a href="/index.html">Home Link</a>
+    <iframe id="myIframe" src="http://127.0.0.1:5500/index.html" frameborder="0">
+        
+    </iframe>
+    <dialog id="searchingForDirector">
+        <h1>Getting Config:</h1>
+        <p class="progress-message">Searching for connected director...</p>
+        <div class="progress-bar">
+            <div class="bar"></div>
+        </div>
+        <!-- method="dialog" -->
+        <div class="end-form">
+            <button class="agknowledge">OK</button>
+        </div>
+    </dialog>
+    <div id="miniAlerts">
+        <div class="alert" id="searchingForDirectorMINI">
+            <button class="close-x">x</button>
+            <h1>Getting Config:</h1>
+            <p class="message">This is a sample message</p>
+            <div class="progress-bar">
+                <div class="bar"></div>
+            </div>
+            <div class="end-form">
+                <button class="agknowledge">OK</button>
+            </div>
+        </div>
+    </div>   
+</body>
+<script>
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+    eventer(messageEvent, e => {
+        // If plugins are set up
+        if(plugins) {
+            for (let i = 0; i < plugins.length; i++) {
+                if(plugins[i].mainSource.iframe !== undefined && plugins[i].mainSource.iframe.contentWindow === e.source) {
+                    // Send message for processing by the plugin object
+                    plugins[i].newMessage(e.data);
+                }
+            }
+        }
+        // If vdo.ninja is setup
+
+    });
+
+    async function loadScript(url, callback) {
+        var script = document.createElement("script")
+        script.type = "text/javascript";
+        script.src = url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+
+        return new Promise((res, rej) => {
+            if(script.readyState) {  // only required for IE <9
+                script.onreadystatechange = function() {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                        res();
+                    }
+                };
+            }else {  //Others
+                script.onload = function() {
+                    callback();
+                    res();
+                };
+            }
+        });
+    }
+
+    function addURLParameter(parameter, value) {
+        window.history.pushState({}, '', '?' + parameter + '=' + value)
+    }
+
+</script>
+<!-- Time sensitive -->
+<script src="js/front/alerts.js"></script>
+<!-- Important -->
+<script defer src="js/realtime.js"></script>
+<script defer src="js/main.js"></script>
+
+<!-- Secondary loads -->
+<!-- <script defer src="js/plugin-manager.js"></script> -->
+<!-- <script defer src="js/vplugin.js"></script> -->
+</html>
