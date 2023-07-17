@@ -1,0 +1,28 @@
+{
+  "name": "vidlium_director",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "startreload": "browser-sync start --server --files \"./dist/*\" --startPath \"./dist/index.html\" --no-notify",
+    "dev": "webpack watch --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andrew-Gallimore/vidlium_director.git"
+  },
+  "author": "Andrew Gallimore",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Andrew-Gallimore/vidlium_director/issues"
+  },
+  "homepage": "https://github.com/Andrew-Gallimore/vidlium_director#readme",
+  "devDependencies": {
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "firebase": "^10.0.0"
+  }
+}
