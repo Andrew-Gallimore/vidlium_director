@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 
 // Director-Systems Firebase configuration
@@ -16,30 +16,35 @@ const firebaseConfig = {
 
 // Initializeing Firebase
 const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
 
 
-function createStream(userId, name, email, imageUrl) {
-    const db = getDatabase();
-    set(ref(db, 'users/' + userId), {
-      username: name,
-      email: email,
-      profile_picture : imageUrl
-    });
-}
+// Signing in
 
-const db = getDatabase();
-var cvalue = "2oly66sp3";
+// const auth = getAuth();
+// signInAnonymously(auth)
+//   .then(() => {
+//     console.log("signed in")
+//     // console.log(user)
+//     // var idToken = await user.getIdTokenResult(true);
+//     // console.log(idToken)
+//     // getData()
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   });
 
-// Getting stream name
-var streamNameRef = ref(db, 'streams/' + cvalue + '/stream_name');
-onValue(streamNameRef, (snapshot) => {
-  const data = snapshot.val();
-  console.log(data)
-});
-
-var streams = ref(db, 'streams');
-onValue(streams, (snapshot) => {
-  const data = snapshot.val();
-  console.log(data)
-});
+// onAuthStateChanged(auth, async (user) => {
+//   if (user) {
+//     console.log("User signed rin")
+//     // console.log(user)
+//     var idToken = await user.getIdTokenResult(true);
+//     console.log(idToken.claims)
+//     // const uid = user.uid;
+//     getData();
+//     // ...
+//   } else {
+//     console.log("User signed out")
+//     // User is signed out
+//     // ...
+//   }
+// });

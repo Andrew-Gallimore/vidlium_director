@@ -6,7 +6,9 @@
   "scripts": {
     "startreload": "browser-sync start --server --files \"./dist/*\" --startPath \"./dist/index.html\" --no-notify",
     "dev": "webpack watch --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "firebase-dev": "firebase emulators:start",
+    "firebase-push": "firebase deploy --only functions"
   },
   "repository": {
     "type": "git",

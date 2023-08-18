@@ -10,14 +10,21 @@
 </head>
 <body>
     <h1>Director Site</h1>
-    <h2>This is a test to see that netlify is working</h2>
-    <p>V1.2</p>
-    <a href="/index.html">Home Link</a>
-    <iframe id="myIframe" src="http://127.0.0.1:5500/index.html" frameborder="0">
+    <!-- <h2>This is a test to see that netlify is working</h2> -->
+    <p>V1.3</p>
+    <div class="director-list">
+        <template>
+            <div class="icon">
+                <p class="letters">Ag</p>
+            </div>
+        </template>
+    </div>
+    <!-- <a href="/index.html">Home Link</a> -->
+    <!-- <iframe id="myIframe" src="http://127.0.0.1:5500/index.html" frameborder="0"> -->
         
     </iframe>
     <dialog id="searchingForDirector">
-        <h1>Getting Config:</h1>
+        <h1>Loading stream:</h1>
         <p class="progress-message">Searching for connected director...</p>
         <div class="progress-bar">
             <div class="bar"></div>
@@ -30,8 +37,8 @@
     <div id="miniAlerts">
         <div class="alert" id="searchingForDirectorMINI">
             <button class="close-x">x</button>
-            <h1>Getting Config:</h1>
-            <p class="message">This is a sample message</p>
+            <h1>Loading stream:</h1>
+            <p class="progress-message">This is a sample message</p>
             <div class="progress-bar">
                 <div class="bar"></div>
             </div>
@@ -42,6 +49,10 @@
     </div>   
 </body>
 <script>
+    // Default namespaces that will get replaced if the library is there
+    var plugins;
+    var Portal;
+
     var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
     var eventer = window[eventMethod];
     var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
@@ -55,7 +66,11 @@
                 }
             }
         }
-        // If vdo.ninja is setup
+        // If the portal library is set up
+        if(Portal) {
+            Portal.onMessage(e.data)
+        }
+        // VDOwrapper is set up
 
     });
 
@@ -90,8 +105,13 @@
 </script>
 <!-- Time sensitive -->
 <script src="js/front/alerts.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/macmcmeans/localDataStorage@master/localDataStorage-3.0.0.min.js" 
+    integrity="sha512-dEhk3bL90qpWkcHCJDErHbZEY7hGc4ozmKss33HSjwMeSBKBtiw/XVIE7tb5u+iOEp6dTIR9sCWW7J3txeTQIw=="
+    crossorigin="anonymous"
+></script>
 <!-- Important -->
-<script defer src="js/realtime.js"></script>
+<!-- <script defer src="js/realtime.js"></script> -->
+<script src="js/portal.js"></script>
 <script defer src="js/main.js"></script>
 
 <!-- Secondary loads -->

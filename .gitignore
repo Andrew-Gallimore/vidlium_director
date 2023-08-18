@@ -1,2 +1,5 @@
-# Dependencies
 /node_modules
+/functions
+/database-debug.log
+/firestore-debug.log
+/ui-debug.log

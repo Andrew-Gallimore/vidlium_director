@@ -64,13 +64,15 @@ for (let i = 0; i < alertList.length; i++) {
 
         setProgressBar: function(value) {
             var bar = document.querySelector("#" + this.main + " .bar");
-            if((Number(bar.style.width.slice(0, -1)) / 100) > value) {
-            }else {
+            if((Number(bar.style.width.slice(0, -1)) / 100) > value) {}
+            else {
                 document.querySelector("#" + this.main + " .bar").style.width = value*100 + "%";
+                document.querySelector("#" + this.mini + " .bar").style.width = value*100 + "%";
             }
         },
         setProgressMessage: function(value) {
             document.querySelector("#" + this.main + " .progress-message").innerHTML = value;
+            document.querySelector("#" + this.mini + " .progress-message").innerHTML = value;
         },
         showMain: function() {
             document.querySelector("#" + this.main).showModal();

@@ -2,6 +2,35 @@ body {
     display: flex;
     flex-direction: column;
 }
+iframe {
+    border: solid 1px black;
+    width: 80%;
+    margin-left: 10%;
+    height: 500px;
+}
+
+
+.director-list {
+    display: flex;
+    flex-direction: row;
+}
+.director-list .icon {
+    margin-right: 16px;
+    width: 40px;
+    height: 40px;
+    background: rgb(77, 77, 77);
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.director-list .icon p {
+    color: white;
+}
+
+
+
 #searchingForDirector .progress-bar {
     width: 100%;
     background: rgb(47, 47, 47);
@@ -14,12 +43,6 @@ body {
     background: rgb(189, 189, 189);
     transition: width 0.4s;
 }
-iframe {
-    border: solid 1px black;
-    width: 80%;
-    margin-left: 10%;
-    height: 500px;
-}
 
 #miniAlerts {
     position: absolute;
@@ -31,7 +54,8 @@ iframe {
 #miniAlerts .alert {
     position: relative;
     padding: 8px;
-    background: grey;
+    background: rgb(255, 255, 255);
+    border: solid 2px black;
 }
 #miniAlerts .alert .message {
     width: fit-content;
@@ -43,4 +67,16 @@ iframe {
 }
 #miniAlerts .alert:not(.active) {
     display: none;
+}
+#miniAlerts .progress-bar {
+    width: 100%;
+    background: rgb(47, 47, 47);
+    /* background-image: linear-gradient(to right, rgb(189, 189, 189) 50%, rgb(43, 43, 43) 50%); */
+}
+#miniAlerts .progress-bar .bar {
+    width: 0%;
+    height: 3px;
+    margin-bottom: 10px;
+    background: rgb(189, 189, 189);
+    transition: width 0.4s;
 }
