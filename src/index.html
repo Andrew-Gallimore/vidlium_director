@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Director Page - Vidlium</title>
+    <link rel="icon" href="img/Logo v2 - 64px.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/director/css/director-function.css">
+    <link rel="stylesheet" href="/director/css/btn-styles.css">
+    <link rel="stylesheet" href="/director/css/alerts.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div>
+            <button class="menu-opener">
+                <img src="https://img.icons8.com/F1D051/material-rounded/48/null/menu--v1.png"/>
+            </button>
+            <h1 class="stream-name">Stream Name</h1>
+        </div>
+        <div class="center">
+            <ul>
+                <li><button>
+                    <div class="img-wrapper">
+                        <img src="https://img.icons8.com/FFFFFF/material-rounded/48/null/health-data.png"/>
+                        <img class="color" src="/director/img/Health Data.png">
+                    </div>
+                    <h2>Rooms</h2>
+                </button></li>
+                <li><button>
+                    <div class="img-wrapper">
+                        <img src="https://img.icons8.com/FFFFFF/material-rounded/48/null/collage.png"/>
+                        <img src="/director/img/Collage.png" class="color">
+                    </div>
+                    <!-- <img src="https://img.icons8.com/material-rounded/48/null/group-layouts.png"/> -->
+                    <h2>Scenes</h2>
+                </button></li>
+            </ul>
+        </div>
+        <div>
+            <div class="director-list">
+                <template>
+                    <div class="icon">
+                        <p class="letters">Ag</p>
+                    </div>
+                </template>
+            </div>
+            <div class="warning">
+                <h4>Preview 1.1</h4>
+            </div>
+        </div>
+        <!-- <div class="account-block active">
+            <h2 class="account-label">Andrew</h2>
+            <a class="account-icon"><img src="img/New Icon.png" alt=""></a>
+        </div> -->
+    </nav>
+    <div class="maga-pages">
+        <div class="page all-controls active">
+            
+            <div class="left-panel resizable">
+                <div class="resizer resizer-r"></div>
+
+                <div class="large-lists scrollbar--dark">
+                    <div class="scroll">
+
+                        <h1>Rooms</h1>
+                        <div class="list rooms">
+                            <button data-viewid="av8v1a" class="active" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                                <h3>Room 1</h3>
+                                <div class="sending">
+                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                            <button data-viewid="0ob1f4" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                                <h3>Room 2</h3>
+                                <div class="sending">
+                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                            <button onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                                <h3>Control Room</h3>
+                                <div class="sending">
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                            <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
+                                <h3>Director Chat</h3>
+                                <div class="sending">
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                        </div>
+    
+                        <h1>Scenes</h1>
+                        <div class="list rooms">
+                            <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
+                                <h3>Director BTS</h3>
+                                <div class="sending">
+                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                            <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
+                                <h3>Guests All</h3>
+                                <div class="sending">
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                            <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
+                                <h3>Focused Solo</h3>
+                                <div class="sending">
+                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                </div>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="director-controls pane">
+                    <div class="pane-control">
+                        <button class="move-pane">
+                            <img width="24" height="24" src="https://img.icons8.com/C6C6C6/material-rounded/24/more.png" alt="more"/>
+                            <img width="24" height="24" src="https://img.icons8.com/C6C6C6/material-rounded/24/more.png" alt="more"/>
+                        </button>
+                        <button class="expand-window">
+                            <img width="48" height="48" src="https://img.icons8.com/C6C6C6/material-rounded/48/right.png" alt="right"/>
+                        </button>
+                    </div>
+                    <div class="label">
+                        <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                        <h3>Your Feed</h3>
+                    </div>
+                    <div class="content apply-btn-styles">
+                        <div class="buttons">
+                            <button>
+                                Mute
+                            </button>
+                            <button>
+                                Hide
+                            </button>
+                        </div>
+                        <!-- <div class="wh-ratio video-feed" data-whratio="0.5625"></div> -->
+                        <!-- <div class="wh-ratio video-feed" data-whratio="2"></div> -->
+                        <!-- <div class="video-feed"></div> -->
+                        <div class="feed-wrapper">
+                            <div class="video-feed"></div>
+                        </div>
+                        <div class="selector">
+                            <select name="director-send-locations">
+                                <option value="aoiv72bo">Room 1</option>
+                                <option value="qov79b3v">Room 2</option>
+                                <option value="12lfiyba">Control Room</option>
+                                <option value="a9vybq21">Director Chat</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-pages">
+                <div class="room page">
+                    <div class="controls-nav">
+                        <h1 class="room-name">Room 1</h1>
+                        <div class="zoom">
+                            <input type="range" min="100" value="300" max="500" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="video-grid scrollbar--dark">
+                        <div class="scroll">
+                            <div class="person">
+                                <div class="video one">1</div>
+                            </div>
+                            <div class="person">
+                                <div class="video one">2</div>
+                            </div>
+                            <div class="person">
+                                <div class="video two">3</div>
+                            </div>
+                            <div class="person">
+                                <div class="video two">4</div>
+                            </div>
+                            <div class="person">
+                                <div class="video one">5</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="plugins">
+                        <div class="pane-slot">
+                            <div class="plugin pane">
+                                <div class="pane-control">
+                                    <button class="move-pane">
+                                        <img width="24" height="24" src="https://img.icons8.com/C6C6C6/material-rounded/24/more.png" alt="more"/>
+                                        <img width="24" height="24" src="https://img.icons8.com/C6C6C6/material-rounded/24/more.png" alt="more"/>
+                                    </button>
+                                    <button class="expand-window">
+                                        <img width="48" height="48" src="https://img.icons8.com/C6C6C6/material-rounded/48/right.png" alt="right"/>
+                                    </button>
+                                </div>
+                                <h2>Chat</h2>
+                            </div>
+                        </div>
+                        <div class="pane-slot">
+                            <div class="plugin">
+                                <h2>Music</h2>
+                            </div>
+                        </div>
+                        <div class="pane-slot">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel resizable">
+                <div class="resizer resizer-l"></div>
+
+                <div class="insp-pages apply-btn-styles">
+                    <div class="page room scrollbar--dark">
+                        <div class="scroll">
+                            <!-- Room Attributes Section -->
+                            <div class="insp-opener">
+                                <button class="open" onclick="openInspSection(this);">
+                                    <!-- Arrow Icon -->
+                                    <div class="icon">
+                                        <img width="48" height="48" src="https://img.icons8.com/757575/material-rounded/48/expand-arrow--v1.png" alt="expand-arrow--v1"/>
+                                    </div>
+                                    <h3>Room Attributes</h3>
+                                </button>
+                                <button class="reload">
+                                    <img width="24" height="24" src="https://img.icons8.com/757575/material-rounded/24/reboot.png" alt="reboot"/>
+                                </button>
+                            </div>
+
+                            <div class="insp-section active">
+                                <div class="settings-grid">
+                                    <div class="label">
+                                        <h4>Room Name</h4>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <input type="text" value="Room 1" autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="label">
+                                        <h4>Guest Limit</h4>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="number-value-input">
+                                                <input type="text" maxlength="6" value="10" autocomplete="off">
+                                                <p>10<span></span></p>
+                                                <button class="up"><img width="24" height="24" src="https://img.icons8.com/686868/material-rounded/24/sort-up.png" alt="sort-up"/></button>
+                                                <button class="down"><img width="24" height="24" src="https://img.icons8.com/686868/material-rounded/24/sort-down.png" alt="sort-down"/></button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="under-input-checkbox">
+                                                <input type="checkbox" autocomplete="off">
+                                                <p>Unlimited Guests</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="label with-switch">
+                                        <h4>Allow Joining</h4>
+                                        <label class="switch">
+                                            <input type="checkbox" checked autocomplete="off">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="sub-text">
+                                                <p>Via link or internally</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="label with-switch">
+                                        <h4>List in stream</h4>
+                                        <label class="switch">
+                                            <input type="checkbox" autocomplete="off">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="sub-text">
+                                                <p>Is it visible to guests?</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Feeds Section -->
+                            <div class="insp-opener">
+                                <button class="open" onclick="openInspSection(this);">
+                                    <!-- Arrow Icon -->
+                                    <div class="icon">
+                                        <img width="48" height="48" src="https://img.icons8.com/757575/material-rounded/48/expand-arrow--v1.png" alt="expand-arrow--v1"/>
+                                    </div>
+                                    <h3>Feeds</h3>
+                                </button>
+                                <button class="reload">
+                                    <img width="24" height="24" src="https://img.icons8.com/757575/material-rounded/24/reboot.png" alt="reboot"/>
+                                </button>
+                            </div>
+
+                            <div class="insp-section active">
+                                <div class="settings-grid">
+                                    <div class="label">
+                                        <h4>P2P Video Quality</h4>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="number-value-input">
+                                                <input type="text" maxlength="4" value="500" autocomplete="off">
+                                                <p>500<span>Kbps</span></p>
+                                                <button class="up"><img width="24" height="24" src="https://img.icons8.com/686868/material-rounded/24/sort-up.png" alt="sort-up"/></button>
+                                                <button class="down"><img width="24" height="24" src="https://img.icons8.com/686868/material-rounded/24/sort-down.png" alt="sort-down"/></button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="pills">
+                                                <button><p>500</p></button>
+                                                <button><p>1000</p></button>
+                                                <button><p>2500</p></button>
+                                                <button><p>6000</p></button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="label">
+                                        <h4>Quick Mute</h4>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="buttons">
+                                                <button>All Mic's</button>
+                                                <button>All Video's</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="label with-switch">
+                                        <h4>Highlight</h4>
+                                        <label class="switch">
+                                            <input type="checkbox" checked autocomplete="off">
+                                            <span class="switch-slider"></span>
+                                        </label>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="selector with-pointer">
+                                                <select name="director-send-locations">
+                                                    <option value="aoiv72bo">Guest 1</option>
+                                                    <option value="qov79b3v">Guest 2</option>
+                                                    <option value="12lfiyba">Named Guest</option>
+                                                    <option value="a9vybq21">Another Guest</option>
+                                                </select>
+                                                <button>
+                                                    <img width="48" height="48" src="https://img.icons8.com/C6C6C6/material-rounded/48/blue-pointer.png" alt="blue-pointer"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Groups Section -->
+                            <div class="insp-opener">
+                                <button class="open" onclick="openInspSection(this);">
+                                    <!-- Arrow Icon -->
+                                    <div class="icon">
+                                        <img width="48" height="48" src="https://img.icons8.com/757575/material-rounded/48/expand-arrow--v1.png" alt="expand-arrow--v1"/>
+                                    </div>
+                                    <h3>Groups</h3>
+                                </button>
+                                <button class="reload">
+                                    <img width="24" height="24" src="https://img.icons8.com/757575/material-rounded/24/reboot.png" alt="reboot"/>
+                                </button>
+                            </div>
+
+                            <div class="insp-section active">
+                                <div class="settings-grid">
+                                    <div class="label">
+                                        <h3>Groups</h3>
+                                    </div>
+                                    <div class="track">
+                                        <div>
+                                            <div class="buttons">
+                                                <button>
+                                                    <img width="24" height="24" src="https://img.icons8.com/C6C6C6/material-rounded/24/plus-math--v1.png" alt="plus-math--v1"/>Add Group
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="full-wide track">
+                                        <!-- Group pills list thing... -->
+                                        <div>
+                                            <div class="multi-select">
+                                                <!-- NEED to place items BEFORE the empty-label -->
+                                                <div class="item">
+                                                    <div class="icon"></div>
+                                                    <p>Group 1</p>
+                                                    <button><img width="24" height="24" src="https://img.icons8.com/F1D051/material-rounded/24/delete-sign.png" alt="delete-sign"/></button>
+                                                </div>
+                                                <p class="empty-label">No Groups to Show</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- <div class="right-panel-wrapper resizable">
+            </div> -->
+
+        </div>
+    </div>
+    <dialog id="searchingForDirector">
+        <h1>Loading stream:</h1>
+        <p class="progress-message">Searching for connected director...</p>
+        <div class="progress-bar">
+            <div class="bar"></div>
+        </div>
+        <!-- method="dialog" -->
+        <div class="end-form">
+            <button class="agknowledge">OK</button>
+        </div>
+    </dialog>
+    <div id="miniAlerts">
+        <div class="alert" id="searchingForDirectorMINI">
+            <button class="close-x">x</button>
+            <h1>Loading stream:</h1>
+            <p class="progress-message">This is a sample message</p>
+            <div class="progress-bar">
+                <div class="bar"></div>
+            </div>
+            <div class="end-form">
+                <button class="agknowledge">OK</button>
+            </div>
+        </div>
+    </div>   
+</body>
+
+<!-- Inline script that has basic functions needed everywhere -->
+<script>
+    // Default namespaces that will get replaced if the library is there
+    var plugins;
+    var Portal;
+
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+    eventer(messageEvent, e => {
+        // If plugins are set up
+        if(plugins) {
+            for (let i = 0; i < plugins.length; i++) {
+                if(plugins[i].mainSource.iframe !== undefined && plugins[i].mainSource.iframe.contentWindow === e.source) {
+                    // Send message for processing by the plugin object
+                    plugins[i].newMessage(e.data);
+                }
+            }
+        }
+        // If the portal library is set up
+        if(Portal) {
+            Portal.onMessage(e.data)
+        }
+        // VDOwrapper is set up
+
+    });
+
+    async function loadScript(url, callback) {
+        var script = document.createElement("script")
+        script.type = "text/javascript";
+        script.src = url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+
+        return new Promise((res, rej) => {
+            if(script.readyState) {  // only required for IE <9
+                script.onreadystatechange = function() {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                        res();
+                    }
+                };
+            }else {  //Others
+                script.onload = function() {
+                    callback();
+                    res();
+                };
+            }
+        });
+    }
+
+    function addURLParameter(parameter, value) {
+        window.history.pushState({}, '', '?' + parameter + '=' + value)
+    }
+
+</script>
+
+<!-- NOT Async-loaded JS -->
+<!-- <script defer src="https://cdn.jsdelivr.net/gh/macmcmeans/localDataStorage@master/localDataStorage-3.0.0.min.js" 
+    integrity="sha512-dEhk3bL90qpWkcHCJDErHbZEY7hGc4ozmKss33HSjwMeSBKBtiw/XVIE7tb5u+iOEp6dTIR9sCWW7J3txeTQIw=="
+    crossorigin="anonymous"
+></script> -->
+
+<script defer src="/director/js/lib/portal.js"></script>
+<script defer src="/director/js/lib/alerts.js"></script>
+<script defer src="/director/js/director-main.js"></script>
+
+<script defer src="/director/js/lib/paging.js"></script>
+<script defer src="/director/js/lib/inputs.js"></script>
+<script defer src="/director/js/ui.js"></script>
+
+
+<script defer src="/director/js/video-layout.js"></script>
+
+<!-- Entire bundle of Draggable -->
+<script defer src="https://cdn.jsdelivr.net/npm/@shopify/draggable@1.0.0-beta.11/lib/draggable.bundle.js"></script>
+
+<link rel="stylesheet" href="/director/css/resizable.css">
+<script defer src="/director/js/resize-panels.js"></script>
+
+</html>

@@ -1,5 +1,6 @@
+# Stuff built during developement / build
 /node_modules
-/functions
-/database-debug.log
-/firestore-debug.log
-/ui-debug.log
+/director
+
+# Temporary things used during merging two developement streams
+/temp

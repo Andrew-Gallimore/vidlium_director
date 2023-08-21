@@ -1,14 +1,11 @@
 {
   "name": "vidlium_director",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "version": "1.1.0",
+  "description": "The directors-page of the Vidlium site, which used for controling a Vidlium stream",
+  "main": "",
   "scripts": {
-    "startreload": "browser-sync start --server --files \"./dist/*\" --startPath \"./dist/index.html\" --no-notify",
-    "dev": "webpack watch --mode development",
-    "build": "webpack --mode production",
-    "firebase-dev": "firebase emulators:start",
-    "firebase-push": "firebase deploy --only functions"
+    "start": "gulp dev",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -21,10 +18,12 @@
   },
   "homepage": "https://github.com/Andrew-Gallimore/vidlium_director#readme",
   "devDependencies": {
-    "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
-  },
-  "dependencies": {
-    "firebase": "^10.0.0"
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat-css": "^3.1.0",
+    "gulp-connect": "^5.7.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-terser": "^2.1.0"
   }
 }

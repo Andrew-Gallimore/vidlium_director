@@ -1,0 +1,778 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@200;400;700&display=swap');
+
+:root {
+    /* Sizes */
+    --top-nav-height: 50px;
+
+    /* Colors */
+    --main-color: #BC42D2;
+    --main-color-light: #db7beb;
+    --second-color: #4879E7;
+    --accent-color: #F1D051;
+
+    --page-bg: #1D1D1F;
+    --menunav-bg: #252528;
+    --regbox-bg: #28282B;
+
+    --importbox-bg: #2E2E2F;
+    --importbox-bg-transparent: #2e2e2f9e;
+    --importbox-border: #403A44;
+
+    --expandwindow-bg: #2E2E2F;
+    --expandwindow-bg-hover: #383839;
+    --expandwindow-bg-active: #4c4c4f;
+
+    --scrollbar-track: rgba(0, 0, 0, 0.234);
+    --scrollbar-thumb: #454447;
+    --scrollbar-thumb-hover: #454447;
+    --scrollbar-thumb-select: #979599;
+
+    --main-font: 'Heebo', sans-serif;
+}
+
+/* Basic element styles */
+p, h1, h2, h3, h4, h5, h6, input {
+    font-family: var(--main-font);
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+}
+p {
+    font-size: 14px;
+    margin: 0;
+    color: #c4c4c4;
+}
+input {
+    font-size: 14px;
+}
+select {
+    font-size: 14px;
+}
+p.small {
+    font-size: 10px;
+}
+button {
+    font-size: 14px;
+    font-weight: 600;
+}
+select {
+    font-size: 14px;
+    font-weight: 400;
+}
+iframe {
+    display: none;
+}
+
+/* Scrollbar stylings */
+.scrollbar--dark {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
+    /* background: rgba(28, 28, 28, 0.7);  */
+}
+.scrollbar--dark::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+    /* background-color: red;  */
+}
+.scrollbar--dark::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track); }
+.scrollbar--dark::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border: 1px solid var(--scrollbar-track);
+}
+.scrollbar--dark::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover); 
+}
+.scrollbar--dark::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-select); 
+}
+.scrollbar--dark::-webkit-scrollbar-track {
+    border: 1px solid var(--scrollbar-track);
+    background-color: var(--scrollbar-track); 
+}
+
+/* For discovering items that have weird margins */
+/* * {
+    outline: solid 1px red;
+} */
+
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--page-bg);
+}
+
+
+/* BEGIN Top nav CSS */
+.top-nav {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    height: var(--top-nav-height);
+    padding: 0 24px;
+    background: var(--menunav-bg);
+    background: linear-gradient(45deg, #252528 0% 0%, #252528 75.94% 75.94%, rgba(72, 121, 231, 0.15) 100% 100%);
+}
+.top-nav > div {
+    display: flex;
+    align-items: center;
+}
+.top-nav .menu-opener {
+    display: flex;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-right: 24px;
+}
+.top-nav .menu-opener img {
+    width: 36px;
+    height: 36px;
+}
+.top-nav .stream-name {
+    color: #ffffff;
+    user-select: none;
+}
+.top-nav .center {
+    display: flex;
+    flex-direction: row;
+}
+.top-nav ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.top-nav li {
+    margin: 0 12px;
+}
+.top-nav li button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.top-nav li button h2 {
+    /* opacity: 0.65; */
+    color: #D1D1D1;
+    transition: color 0.2s;
+    /* transition: opacity 0.2s; */
+}
+.top-nav li:hover button h2,
+.top-nav li:focus button h2 {
+    /* opacity: 1; */
+    color: #ffffff;
+}
+.top-nav li button .img-wrapper {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    margin-right: 8px;
+}
+.top-nav li button img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    transition: opacity 0.2s;
+}
+.top-nav li button .color {
+    opacity: 0;
+}
+.top-nav li:hover button img,
+.top-nav li:focus button img {
+    opacity: 0;
+}
+.top-nav li:hover button .color,
+.top-nav li:focus button .color {
+    opacity: 1;
+}
+
+/* Director-list block at the top-right of nav */
+.top-nav .director-list {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: 0;
+}
+.top-nav .director-list .icon {
+    margin-right: 16px;
+    width: 35px;
+    height: 35px;
+    background: rgb(77, 77, 77);
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.top-nav .director-list .icon p {
+    color: white;
+}
+
+/* Warning block of the top nav */
+.top-nav .warning {
+    padding: 4px 16px;
+    border-radius: 8px;
+    background: #F1D051;
+}
+.top-nav .warning > * {
+    color: rgb(21, 21, 21);
+    /* font-size: 16px; */
+    font-weight: 700;
+    user-select: none;
+}
+
+/* Account Block of the top nav (CURRENTLY HIDDEN) */
+.top-nav .account-block {
+    margin-left: auto;
+    margin-right: 0;
+}
+.top-nav .account-block:not(.active) {
+    display: none;
+}
+.top-nav .account-label {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    margin-right: 16px;
+}
+.top-nav .account-icon {
+    width: 40px;
+    height: 40px;
+    background: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.top-nav .account-icon img {
+    width: 100%;
+    height: 100%;
+}
+/* END Top nav CSS */
+
+
+
+.maga-pages {
+    flex-grow: 100;
+}
+.maga-pages > .page {
+    height: 100%;
+}
+
+.all-controls {
+    display: grid;
+    grid-template-columns: min-content auto min-content;
+}
+
+
+
+/* BEGIN Left panel CSS */
+.all-controls .left-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--top-nav-height));
+
+    min-width: 150px;
+    width: 13vw;
+    background: var(--menunav-bg);
+    background: linear-gradient(190deg, #252528 0% 0%, #252528 63.15% 63.15%, rgba(123, 53, 137, 0.7) 84.38% 84.38%, rgba(72, 121, 231, 0.7) 100% 100%);
+}
+/* This add the little fillet (interverted border radius looking thing) to the side the left pannel and the top navbar */
+.all-controls .left-panel::before {
+    content: "";
+    position: absolute;
+    
+    background-color: #0074d900;
+    right: -20px;
+    height: 50px;
+    width: 20px;
+    border-top-left-radius: 20px;
+    box-shadow: 0px -20px 0 0 var(--menunav-bg); /* This is where the magic happens! */
+}
+.all-controls .left-panel .large-lists {
+    /* flex-grow: 100; */
+    height: 100%;
+    padding: 0 8px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    direction: rtl;
+}
+.all-controls .left-panel .scroll {
+    /* height: 0px; */
+    direction: ltr;
+}
+.all-controls .left-panel .large-lists h1 {
+    color: #E6E6E6;
+    padding-left: 8px;
+    margin: 12px 0;
+}
+.all-controls .left-panel .list {
+    margin-bottom: 24px;
+}
+.all-controls .left-panel .list button {
+    position: relative;
+    /* width: calc(100% - 8px); */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* background: #2B2A2E; */
+    background: none;
+    border: none;
+    /* border: solid 1px #393939; */
+    border-radius: 4px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.all-controls .left-panel .list button:hover {
+    background: #38373B;
+}
+.all-controls .left-panel .list button:active {
+    background: #4b4a4f;
+    transition: background 0s;
+}
+.all-controls .left-panel .list button.active {
+    background:  linear-gradient(80deg, #bc42d2 0%, #4879e7 20%, #bc42d2 50%, #bc42d2 65%, rgba(51, 51, 51, 0.311) 80%);
+    background-size: 500% auto;
+    background-position-x: 100%;
+    animation: viewbtn-background 0.8s ease-out forwards;
+}
+
+@keyframes viewbtn-background {
+    0% {
+        background-position-x: 100%;
+    }
+    20% {
+        background-position-x: 100%;
+    }
+    100% {
+        background-position-x: 0%;
+    }
+}
+
+.all-controls .left-panel .list button h3 {
+    flex-grow: 100;
+    text-align: left;
+    color: #D1D1D1;
+    font-size: 18px;
+}
+.all-controls .left-panel .list button .sending {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.all-controls .left-panel .list button .sending img {
+    width: 20px;
+    height: 20px;
+    padding-right: 4px;
+}
+
+
+.all-controls .left-panel .director-controls {
+    /* background: var(--importbox-bg-transparent); */
+    background: #16161646;
+    padding: 8px;
+    padding-top: 16px;
+    margin: 0 8px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.pane {
+    position: relative;
+}
+.pane .pane-control {
+    position: absolute;
+    top: 0;
+    translate: 0 -50%;
+    right: -2px;
+    display: flex;
+    flex-direction: row;
+}
+.pane .move-pane {
+    position: relative;
+    width: 32px;
+    height: 24px;
+    margin-right: 4px;
+    background: var(--expandwindow-bg);
+    border: solid 2px var(--buttonbg);
+    /* --buttonbg and related colors are found on btn-styles.css */
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+.pane .move-pane img:nth-child(1) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% calc(-50% - 3px);
+    width: 20px;
+    height: 20px;
+    /* margin-bottom: 6px; */
+}
+.pane .move-pane img:nth-child(2) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% calc(-50% + 3px);
+    width: 20px;
+    height: 20px;
+    /* margin-top: 6px; */
+}
+.pane .move-pane:hover {
+    background: var(--expandwindow-bg-hover);
+}
+.pane .move-pane:active {
+    background: var(--expandwindow-bg-active);
+    transition: background 0s;
+}
+.pane .expand-window {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--expandwindow-bg);
+    border: solid 2px var(--buttonbg);
+    /* --buttonbg and related colors are found on btn-styles.css */
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+.pane .expand-window:hover {
+    background: var(--expandwindow-bg-hover);
+}
+.pane .expand-window:active {
+    background: var(--expandwindow-bg-active);
+    transition: background 0s;
+}
+.pane .expand-window img {
+    width: 20px;
+    height: 20px;
+    transform: rotate(-45deg);
+}
+
+
+.all-controls .director-controls .label {
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4px;
+}
+.all-controls .director-controls .label h3 {
+    color: #D1D1D1;
+    font-size: 16px;
+}
+.all-controls .director-controls .label img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+.all-controls .director-controls .content.virtical {
+    display: grid;
+    grid-template-columns: [left] auto [mid] min-content [right];
+    grid-template-rows: [top] auto [mid] min-content [bottom];
+}
+.all-controls .director-controls .buttons {
+    grid-column-start: mid;
+    grid-column-end: right;
+    grid-row-start: top;
+    grid-row-end: mid;
+    display: flex;
+    flex-direction: row;
+}
+.all-controls .director-controls .buttons button {
+    width: 50%;
+}
+.all-controls .director-controls .content.virtical .buttons {
+    display: block;
+}
+.all-controls .director-controls .content.virtical .buttons button {
+    width: 100%;
+}
+.all-controls .director-controls .feed-wrapper {
+    width: 100%;
+}
+.all-controls .director-controls .video-feed {
+    background: #000000;
+    margin: 8px auto;
+    max-height: 160px;
+    
+    /* aspect-ratio: 1/2; */
+    /* aspect-ratio: 1; */
+    /* aspect-ratio: 4/3; */
+    aspect-ratio: 16/9;
+}
+.all-controls .director-controls .content.virtical .video-feed {
+    grid-column-start: left;
+    grid-column-end: mid;
+    grid-row-start: top;
+    grid-row-end: mid;
+    
+    margin: 0 auto;
+}
+.all-controls .director-controls select {
+    grid-column-start: left;
+    grid-column-end: right;
+    grid-row-start: mid;
+    grid-row-end: bottom;
+
+    width: 100%;
+}
+/* END Left panel CSS */
+
+
+
+/* BEGIN Middle panel CSS */
+.all-controls .content-pages > .page {
+    width: calc(100% - 36px);
+    height: calc(100% - 56px);
+    margin: 20px 20px;
+    padding: 8px;
+    margin-right: 0;
+    background: var(--regbox-bg);
+    border-radius: 7px;
+}
+.content-pages .room.page {
+    display: grid;
+    grid-template-columns: [left] auto [mid] min-content [right];
+    grid-template-rows: [top] min-content [mid] auto [bottom];
+}
+
+
+.content-pages .room.page .controls-nav {
+    grid-column: left / right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.content-pages .room.page .controls-nav .zoom {
+    margin-left: auto;
+    margin-right: 0;
+}
+.content-pages .room.page .scroll {
+    width: 100%;
+    height: 0px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    direction: ltr;
+}
+.content-pages .room.page .video-grid {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    direction: rtl;
+}
+.content-pages .room.page .video {
+    background: rgb(255, 255, 255);
+    margin: 8px;
+}
+.content-pages .room.page .video.one {
+    aspect-ratio: 16/9;
+}
+.content-pages .room.page .video.two {
+    aspect-ratio: 4/7;
+}
+
+.content-pages .room.page .plugins {
+    width: 250px;
+}
+.content-pages .room.page .plugin {
+    background: var(--importbox-bg);
+    border-radius: 5px;
+    border: solid 2px var(--importbox-border);
+    padding: 8px;
+    margin-bottom: 5px;
+}
+/* END Middle panel CSS */
+
+
+
+/* BEGIN Right panel CSS */
+.all-controls .right-panel {
+    min-width: 250px;
+    width: 21vw;
+}
+.all-controls .right-panel {
+    height: calc(100% - 60px);
+    margin: 20px 20px;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    background: var(--regbox-bg);
+    border-radius: 7px;
+}
+
+/* Inspector CSS */
+.insp-pages {
+    height: 100%;
+}
+.insp-pages .page {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.insp-pages .scroll {
+    height: 0px;
+}
+.insp-pages .insp-opener {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 8px);
+    padding: 0 4px;
+    display: flex;
+    flex-direction: row;
+}
+.insp-pages .insp-opener .open {
+    /* flex-grow: 100; */
+    width: fit-content;
+    margin-left: 0;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.insp-pages .insp-opener:not(:first-child) {
+    padding-top: 12px;
+    border-top: 1px solid #555555;
+}
+.insp-pages .insp-opener .open h3 {
+    color: #C6C6C6;
+    font-weight: 400;
+    text-align: left;
+    line-height: 20px;
+    /* cursor: pointer; */
+}
+.insp-pages .insp-opener .open .icon {
+    position: relative;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* cursor: pointer; */
+}
+.insp-pages .insp-opener .open img {
+    width: 22px;
+    height: 22px;
+    transform: rotate(180deg);
+}
+.insp-pages .insp-opener .open.active img {
+    transform: translateY(-2px);
+}
+.insp-pages .insp-opener .reload {
+    width: 26px;
+    height: 26px;
+    margin: auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.insp-pages .insp-opener .reload:hover {
+    background: #2F2F32;
+}
+.insp-pages .insp-opener .reload:active {
+    transition: background 0s;
+    background: #4b4b50;
+}
+.insp-pages .insp-opener .reload:active img {
+    filter: brightness(1.35);
+}
+.insp-pages .insp-opener .reload img {
+    width: 16px;
+    height: 16px;
+}
+
+.insp-pages .insp-section {
+    /* overflow: hidden; */
+    /* height: 100%; */
+    opacity: 1;
+    padding-bottom: 20px;
+    transition: opacity 0.2s;
+    padding: 0 8px;
+}
+.insp-pages .insp-section:not(.active) {
+    height: 0px;
+    opacity: 0;
+    /* padding-bottom: 2px; */
+}
+.insp-pages .settings-grid {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-row-gap: 6px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+/* THE Label Styles are based on the text being an h3 at a particular height */
+.insp-pages .settings-grid .label {
+    color: #C6C6C6;
+}
+.insp-pages .settings-grid .label h3 {
+    margin-top: 4px;
+}
+
+.insp-pages .settings-grid .label.with-switch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.insp-pages .settings-grid .label.with-switch .switch {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.insp-pages .settings-grid .track {
+    margin-top: -5px;
+    margin-bottom: 12px;
+}
+.insp-pages .settings-grid .track > * {
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+}
+.insp-pages .settings-grid .full-wide {
+    grid-column: 1 / -1;
+}
+/* See all input styling's at btn-styles.css */
+/* END Left panel CSS */

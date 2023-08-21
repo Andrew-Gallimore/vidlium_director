@@ -1,36 +1,3 @@
-body {
-    display: flex;
-    flex-direction: column;
-}
-iframe {
-    border: solid 1px black;
-    width: 80%;
-    margin-left: 10%;
-    height: 500px;
-}
-
-
-.director-list {
-    display: flex;
-    flex-direction: row;
-}
-.director-list .icon {
-    margin-right: 16px;
-    width: 40px;
-    height: 40px;
-    background: rgb(77, 77, 77);
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.director-list .icon p {
-    color: white;
-}
-
-
-
 #searchingForDirector .progress-bar {
     width: 100%;
     background: rgb(47, 47, 47);

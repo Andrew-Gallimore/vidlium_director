@@ -1,0 +1,489 @@
+:root {
+    --text: #C6C6C6;
+    --minortext: #686868;
+
+    --inputbg: #1E1C1E;
+    --inputoutline: #808080;
+    --input-hmono: #ffffff;
+    --input-hcolor: #4879E7;
+
+    --buttonbg: #242325;
+    --buttonbg-hover: #2a292b;
+    --buttonbg-active: #3f3c40;
+    --buttonoutline: #2F2F32;
+
+    --pillbg: #2F2F32;
+}
+
+
+
+/* Text input */
+.apply-btn-styles input[type=text] {
+    width: calc(100% - 16px);
+    height: 24px;
+    margin: 0;
+    padding: 0 8px;
+    border: none;
+    border-radius: 4px;
+    background: var(--inputbg);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 400;
+}
+
+
+
+/* Slider input */
+/* .apply-btn-styles input[type=range] {
+    height: 4px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    -webkit-appearance: none;
+    background: var(--inputbg);
+    background-image: linear-gradient(var(--input-hmono), var(--input-hmono));
+    background-repeat: no-repeat;
+    background-size: 10% 100%;
+    border-radius: 2px;
+} */
+/* Slider thumb */
+/* .apply-btn-styles input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: -6px;
+
+    width: 16px;
+    height: 16px;
+    background: var(--button);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.apply-btn-styles input[type=range]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--button);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.apply-btn-styles input[type=range]::-ms-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--button);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+} */
+/* Slider track */
+/* .apply-btn-styles input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.apply-btn-styles input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.apply-btn-styles input[type=range]::-ms-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+} */
+
+
+
+/* Regular number input */
+.apply-btn-styles .number-value-input {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.apply-btn-styles .number-value-input p {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text);
+    font-size: 14px;
+    /* font-weight: 700; */
+    pointer-events: none;
+    user-select: none;
+}
+.apply-btn-styles .number-value-input p span {
+    color: var(--minortext);
+    margin-left: 3px;
+    /* font-weight: 400; */
+}
+.apply-btn-styles .number-value-input input[type=text] {
+    height: 24px;
+    padding-left: 8px;
+    padding-right: 30px;
+    border-radius: 4px;
+    background: var(--inputbg);
+    color: transparent;
+    /* font-weight: 700; */
+}
+.apply-btn-styles .number-value-input input[type=text]:focus {
+    color: var(--text);
+}
+.apply-btn-styles .number-value-input input[type=text]:focus ~ p {
+    opacity: 0;
+}
+.apply-btn-styles .number-value-input button {
+    position: absolute;
+    right: 8px;
+    height: 7px;
+    display: flex;
+    align-items: center;
+
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.apply-btn-styles .number-value-input button.up {
+    top: 50%;
+    transform: translateY(calc(-50% - 3px));
+}
+.apply-btn-styles .number-value-input button.down {
+    top: 50%;
+    transform: translateY(calc(-50% + 3px));
+}
+.apply-btn-styles .number-value-input button img {
+    pointer-events: none;
+    height: 12px;
+    width: 12px;
+}
+
+
+
+/* Under another input checkbox */
+.apply-btn-styles .under-input-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.apply-btn-styles .under-input-checkbox input {
+    margin: 4px;
+}
+.apply-btn-styles .under-input-checkbox p {
+    pointer-events: none;
+    user-select: none;
+}
+
+
+/* Sub text */
+.apply-btn-styles .sub-text {
+    margin-top: -5px;
+}
+.apply-btn-styles .sub-text p {
+    color: var(--minortext);
+    user-select: none;
+    pointer-events: none;
+}
+
+
+
+/* Pills */
+.apply-btn-styles .pills {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+.apply-btn-styles .pills button {
+    margin: 4px;
+    padding: 2px 8px;
+    background: var(--pillbg);
+    border: none;
+    border-radius: 30px;
+    /* cursor: pointer; */
+    transition: background 0.15s;
+}
+.apply-btn-styles .pills button:first-child() {
+    margin-left: 0;
+}
+
+.apply-btn-styles .pills button:hover {
+    background: #38373B;
+}
+.apply-btn-styles .pills button:active {
+    transition: background 0s;
+    background: #4b4b50;
+}
+.apply-btn-styles .pills button:active p {
+    filter: brightness(1.25);
+}
+.apply-btn-styles .pills button p {
+    font-weight: 400;
+}
+
+
+/* Switch Input */
+.apply-btn-styles .switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 18px;
+}
+.apply-btn-styles .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.apply-btn-styles .switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 11px;
+    background: var(--inputbg);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.apply-btn-styles .switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    top: 50%;
+    transform: translate(0, -50%);
+    border-radius: 50%;
+    background: var(--text);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.apply-btn-styles .switch input:checked + .switch-slider {
+    background: var(--input-hcolor);
+}
+.apply-btn-styles .switch input:focus + .switch-slider {
+    /* outline: auto; */
+}
+.apply-btn-styles .switch input:checked + .switch-slider:before {
+    -webkit-transform: translate(18px, -50%);
+    -ms-transform: translate(18px, -50%);
+    transform: translate(18px, -50%);
+}
+
+
+
+/* List of button inputs */
+.apply-btn-styles .buttons {
+    width: 100%;
+    /* display: grid; */
+    /* grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column; */
+    grid-column-gap: 3px;
+    /* grid-template-columns: repeat(auto-fit, minmax(auto, 1fr)); */
+    /* grid-template-columns: repeat(auto-fill, clamp(min-content, 1fr, 1fr)); */
+
+    display: flex;
+    flex-wrap: wrap;
+}
+.apply-btn-styles .buttons button {
+    flex: 1 1 max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 22px;
+    border: solid 2px var(--buttonoutline);
+    border-radius: 4px;
+    font-weight: 500;
+    background: var(--buttonbg);
+    color: var(--text);
+    margin: 2px 0;
+    padding: 0 8px;
+    cursor: pointer;
+}
+.apply-btn-styles .buttons button:hover {
+    background: var(--buttonbg-hover);
+    transition: background 0.15s;
+}
+.apply-btn-styles .buttons button:active {
+    background: var(--buttonbg-active);
+    transition: background 0s;
+}
+.apply-btn-styles .buttons button img {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+}
+
+
+
+/* Radio Button Inputs */
+/* .apply-btn-styles .radio-btns {
+    width: calc(100% - 4px);
+    grid-column-gap: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--inputbg);
+    padding: 0 2px;
+    border-radius: 4px;
+}
+.apply-btn-styles .radio-btns button {
+    flex: 1 1 max-content;
+    border: none;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 500;
+    background: var(--button);
+    color: var(--text);
+    margin: 2px 0;
+    padding: 0 8px;
+    cursor: pointer;
+}
+.apply-btn-styles .radio-btns button.active {
+    background: var(--button-active);
+} */
+
+
+
+/* Selector Box Input */
+/* .apply-btn-styles .selector-box {
+    position: relative;
+    width: calc(100% - 12px);
+    background: var(--inputbg);
+    border: solid 2px var(--inputoutline);
+    border-radius: 5px;
+    padding: 4px;
+}
+.apply-btn-styles .selector-box .minor-label {
+    color: var(--minortext);
+    font-weight: 400;
+    user-select: none;
+}
+.apply-btn-styles .selector-box .main-label {
+    font-weight: 500;
+    color: var(--text);
+    user-select: none;
+}
+.apply-btn-styles .selector-box button {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--button);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.apply-btn-styles .selector-box button img {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+} */
+
+.apply-btn-styles .multi-select {
+    position: relative;
+    min-height: 12px;
+    width: calc(100% - 16px);
+    background: var(--inputbg);
+    border: solid 2px var(--inputoutline);
+    border-radius: 5px;
+    padding: 6px;
+}
+.apply-btn-styles .multi-select .empty-label {
+    user-select: none;
+    pointer-events: none;
+    text-align: center;
+}
+.apply-btn-styles .multi-select .item ~ .empty-label {
+    display: none;
+}
+.apply-btn-styles .multi-select .item {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: var(--button);
+    border-radius: 3px;
+    padding: 2px;
+}
+.apply-btn-styles .multi-select .item .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    background: black;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.apply-btn-styles .multi-select .item p {
+    color: var(--text);
+    user-select: none;
+    pointer-events: none;
+}
+.apply-btn-styles .multi-select .item button {
+    width: 20px;
+    height: 20px;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: 3px;
+    padding: 0;
+    cursor: pointer;
+}
+.apply-btn-styles .multi-select .item button img {
+    width: 16px;
+    height: 16px;
+}
+
+
+
+/* Selector input */
+.apply-btn-styles .selector {
+    width: 100%;
+}
+.apply-btn-styles .selector select {
+    width: 100%;
+    padding-left: 8px;
+    background: var(--inputbg);
+    border: none;
+    border-radius: 4px;
+    color: var(--text);
+    height: 24px;
+}
+.apply-btn-styles .selector.with-pointer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.apply-btn-styles .selector.with-pointer select {
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+    margin-right: 4px;
+}
+.apply-btn-styles .selector.with-pointer button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: solid 2px var(--buttonoutline);
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background: var(--buttonbg);
+    height: 24px;
+    cursor: pointer;
+}
+.apply-btn-styles .selector.with-pointer img {
+    width: 16px;
+    height: 16px;
+}
