@@ -29,16 +29,18 @@
 </h1>
 
 ## Introduction
-`Vidlium` is a simply powerful tool to bring in remote guests into software like OBS Studio. Vidlium software helps livestream directors manage guests in video chats, personalize their guest’s experiences, and control video feeds with advanced settings.
+`Vidlium` is a simply powerful tool to bring in remote guests into software like OBS Studio. Vidlium software helps livestream directors manage guests in multiple video chats, personalize their guest’s experiences, and control video feeds with advanced settings.
 
-Its fully browser based, uses vdo.ninja under the hood, and is open-source as well as completely free for everyone to use.
+_Its fully browser based, uses vdo.ninja under the hood, and is open-source as well as completely free for everyone to use._
+
+<br>
 
 Check out some of the 'sister repos' of vidlium_director, you can find code for other parts of the website/software/system here:
 - [Vidlium_Website (the core website)](https://github.com/Andrew-Gallimore/vidlium_website)
 - [Vidlium_Docs](https://github.com/Andrew-Gallimore/vidlium_docs)
 
 
-The `Directors Page` is a critial page which allows directors to control a Vidlium Stream. This repository holds only the code for that page found here: https://vidlium.com/director.
+> The `Directors Page` is a critial page which allows directors to control a Vidlium Stream. This repository holds only the code for that page found here: https://vidlium.com/director.
 
 
 ## Usage
