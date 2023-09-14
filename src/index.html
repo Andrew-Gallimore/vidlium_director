@@ -17,7 +17,7 @@
     <nav class="top-nav">
         <div>
             <button class="menu-opener">
-                <img src="https://img.icons8.com/F1D051/material-rounded/48/null/menu--v1.png"/>
+                <img src="https://img.icons8.com/d1d1d1/material-rounded/48/null/menu--v1.png"/>
             </button>
             <h1 class="stream-name">Stream Name</h1>
         </div>
@@ -25,14 +25,14 @@
             <ul>
                 <li><button>
                     <div class="img-wrapper">
-                        <img src="https://img.icons8.com/FFFFFF/material-rounded/48/null/health-data.png"/>
+                        <img src="https://img.icons8.com/d1d1d1/material-rounded/48/null/health-data.png"/>
                         <img class="color" src="/director/img/Health Data.png">
                     </div>
                     <h2>Rooms</h2>
                 </button></li>
                 <li><button>
                     <div class="img-wrapper">
-                        <img src="https://img.icons8.com/FFFFFF/material-rounded/48/null/collage.png"/>
+                        <img src="https://img.icons8.com/d1d1d1/material-rounded/48/null/collage.png"/>
                         <img src="/director/img/Collage.png" class="color">
                     </div>
                     <!-- <img src="https://img.icons8.com/material-rounded/48/null/group-layouts.png"/> -->
@@ -68,40 +68,48 @@
 
                         <h1>Rooms</h1>
                         <div class="list rooms">
+                            <template>
+                                <button onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                                    <h3>Name Error</h3>
+                                    <div class="sending">
+                                        <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    </div>
+                                </button>
+                            </template>
+                            
                             <button data-viewid="av8v1a" class="active" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
                                 <h3>Room 1</h3>
                                 <div class="sending">
-                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
                                     <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
                                 </div>
                             </button>
-                            <button data-viewid="0ob1f4" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                            <!-- <button data-viewid="0ob1f4" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
                                 <h3>Room 2</h3>
                                 <div class="sending">
-                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
-                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                    <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
                                 </div>
                             </button>
                             <button onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
                                 <h3>Control Room</h3>
                                 <div class="sending">
-                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                    
                                 </div>
                             </button>
                             <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
                                 <h3>Director Chat</h3>
                                 <div class="sending">
-                                    <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
+                                    
                                 </div>
-                            </button>
+                            </button> -->
                         </div>
     
                         <h1>Scenes</h1>
-                        <div class="list rooms">
+                        <div class="list scenes">
                             <button onclick="clickOfButtons(this, '.all-controls .left-panel .list')">
                                 <h3>Director BTS</h3>
                                 <div class="sending">
-                                    <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/tv-show.png" alt="tv-show"/>
+                                    <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
                                     <!-- <img width="48" height="48" src="https://img.icons8.com/FFFFFF/material-rounded/48/video-call.png" alt="video-call"/> -->
                                 </div>
                             </button>
@@ -262,7 +270,11 @@
                                         </div>
                                         <div>
                                             <div class="under-input-checkbox">
-                                                <input type="checkbox" autocomplete="off">
+                                                <label class="checkbox">
+                                                    <input type="checkbox" autocomplete="off">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                <!-- <input type="checkbox" autocomplete="off"> -->
                                                 <p>Unlimited Guests</p>
                                             </div>
                                         </div>
@@ -470,6 +482,18 @@
     var eventer = window[eventMethod];
     var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
     eventer(messageEvent, e => {
+        if(e.data.kind !== "video" && e.data.kind !== "audio") {
+            if(e.data.action !== "view-stats-updated" && e.data.stats === undefined) {
+                if(e.data.streamIDs === undefined) {
+                    // console.log("Window event")
+                    // // console.log(e)
+                    // console.log(e.data)
+                }
+            }
+        }else {
+            console.log("AudioVideo")
+        }
+
         // If plugins are set up
         if(plugins) {
             for (let i = 0; i < plugins.length; i++) {
@@ -481,10 +505,22 @@
         }
         // If the portal library is set up
         if(Portal) {
-            Portal.onMessage(e.data)
+            if(e.source === Portal.iframe.contentWindow) Portal.onMessage(e.data);
         }
-        // VDOwrapper is set up
+        // If VDOwrapper is set up
+        if(vdo) {
+            for (let i = 0; i < iframeEventCallbacks.length; i++) {
+                // Filtering the events by if they are for the particular iframe or not
+                if(iframeEventCallbacks[i].iframe !== false) {
+                    if(e.source === iframeEventCallbacks[i].iframe.contentWindow) {
+                        iframeEventCallbacks[i].callback(e, iframeEventCallbacks[i].data);
+                    }
+                }else {
+                    iframeEventCallbacks[i].callback(e, iframeEventCallbacks[i].data);
+                }
 
+            }
+        }
     });
 
     async function loadScript(url, callback) {
@@ -523,13 +559,14 @@
     crossorigin="anonymous"
 ></script> -->
 
+<script defer src="/director/js/views.js"></script>
 <script defer src="/director/js/lib/portal.js"></script>
+<script defer src="/director/js/lib/vdowrapper.js"></script>
 <script defer src="/director/js/lib/alerts.js"></script>
 <script defer src="/director/js/director-main.js"></script>
 
 <script defer src="/director/js/lib/paging.js"></script>
 <script defer src="/director/js/lib/inputs.js"></script>
-<script defer src="/director/js/ui.js"></script>
 
 
 <script defer src="/director/js/video-layout.js"></script>

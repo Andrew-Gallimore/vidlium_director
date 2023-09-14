@@ -4,6 +4,7 @@
   "description": "The directors-page of the Vidlium site, which used for controling a Vidlium stream",
   "main": "",
   "scripts": {
+    "cert": "gulp genCert",
     "start": "gulp dev",
     "build": "gulp"
   },
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/Andrew-Gallimore/vidlium_director#readme",
   "devDependencies": {
+    "devcert": "^1.2.2",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-clean-css": "^4.3.0",

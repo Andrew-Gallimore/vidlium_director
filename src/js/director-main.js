@@ -83,19 +83,21 @@ function startup() {
 
         console.log("> Adding a director")
         var clone = document.querySelector(listLocation + " template").content.cloneNode(true).querySelector(".icon");
-        console.log(clone)
         clone.setAttribute('uuid', UUID);
         clone.style.background = randomColor(90);
 
         document.querySelector(listLocation).appendChild(clone);
     })
-
     Portal.on('remove-director', (UUID) => {
         var listLocation = ".director-list";
 
         console.log("> Adding a director")
         document.querySelector(listLocation + " [uuid='" + UUID + "']").remove()
     })
+
+
+    // Managing rooms
+    Portal.on('updated-rooms', regenerateRooms)
 
     // Now loading the portal (either as creator or not)
     Portal.loadPrimaryChannel(true, {
@@ -136,32 +138,102 @@ function randomColor(brightness){
 
 
 
-// Global variables
-var views = {
-    av8v1a: {
-        viewtype: "vdoroom",
-        data: {
-            roomObject: {}
-        }
-    }
-};
 
-// Loads the view into the viewbox
-function loadView(button) {
-    // Checking if there is a view id attribute
-    var vid = button.getAttribute("data-viewid");
-    if(vid) {
-        // Finding the view
-        if(views[vid]) {
-            // If the view is a vdo.ninja room
-            if(views[vid].viewtype === "vdoroom") {
-                // load the room based on data from the roomObject
-                console.log("Loading vdo.ninja room " + vid)
-            }
-        }else {
-            console.error("View ID '" + vid + "' wasn't found as a view. There was a problem, and so didn't load the view.")
-        }
-    }else {
-        console.error("Can't load view without the button having a 'data-viewid' attribute. Didn't load view.")
+// Adds a room per user request
+function userCreatingRoom(name="") {
+    // TODO: Check if the room is already created in views
+
+    // Adding view & its related UI
+    var data = {roomData: {}}
+    if(name.length > 0) {
+        data.roomData.name = name;
     }
+    var viewID = addVDORoomView(data);
+    addViewButton(viewID);
+
+    // Pinging others that we are adding a room
+    Portal.addRooms([{
+        viewID: viewID,
+        roomData: views[viewID].roomData
+    }]);
+
+    // TODO: Add resources manager to manage what rooms need to be open or which can be closed/only-opened when needed
+    // Opening vdo.ninja room through vdowrapper.js
+    generateVdoRoom(views[viewID].roomData);
+}
+
+// Adds a room per user request
+function userRemovingRoom(viewID) {
+    // Check if the room is created in views
+    if(views[viewID] === undefined) {
+        console.warn("View '" + viewID + "' doesn't exist, can't remove it")
+    }
+    
+    // Pinging others that we are removing a room
+    Portal.removeRooms([{
+        viewID: viewID,
+        roomData: views[viewID].roomData
+    }]);
+    
+    // TODO: Remove vdo.ninja room through vdowrapper.js
+
+    // Removing view & its UI
+    removeViewButton(viewID);
+    removeVDORoomView(viewID);
+}
+
+// Checks what rooms are loaded, and sees if there are any updates needed
+// Should only be called on "updated-rooms" from the Portal
+function regenerateRooms() {
+    // TODO: Change this over to a system where it deletes all the views and adds the new ones
+    for (const room of Portal.db.rooms) {
+        if(!(room.viewID in views))
+        addVDORoomView(room);
+        addViewButton(room.viewID);
+
+        generateVdoRoom(room.roomData);
+    }
+}
+
+// Starts up a vdo.ninja room
+function generateVdoRoom(roomData) {
+    var room = new vdo.Room("testROOOMID");
+    room.register()
+    .then(data => {
+        // Success
+        console.log(data)
+    }).catch(err => {
+        // Error
+        console.warn(err)
+    })
+    room.on("director-status", e => {
+        console.log("Director Status Event")
+        console.log(e)
+    });
+    
+    // Fired as soon as a new person is joining, no data is added yet nessesarally when this fires
+    room.on("person-joining", person => {
+        // e.preventDefault();
+        console.log("Person joining event!")
+        console.log(person)
+    })
+    // Fired after all the information is gathered for the guest
+    room.on("person-connected", person => {
+        // e.preventDefault();
+        console.log("LOADED GUEST!!!!!!")
+        console.log(person)
+        person.addToScene();
+    })
+    
+    
+    room.on("person-video-created", e => {
+        // e.preventDefault();
+        console.log("Video created event!")
+        console.log(e)
+    })
+    room.on("person-left", e => {
+        // e.preventDefault();
+        console.log("Person Left!")
+        console.log(e)
+    })
 }

@@ -2,15 +2,30 @@
     --text: #C6C6C6;
     --minortext: #686868;
 
+    /* --inputbg: #211f21; */
     --inputbg: #1E1C1E;
-    --inputoutline: #808080;
+    --inputbg-hover-tint: #242427;
+    /* --inputbg-hover-tint: #252530; */
     --input-hmono: #ffffff;
     --input-hcolor: #4879E7;
+    
+    --inputoutline: #2f2f2f;
+    --inputoutline-hover-lte: #333333;
+    --inputoutline-hover: #464646;
+    --inputoutline-active: #505050;
 
-    --buttonbg: #242325;
-    --buttonbg-hover: #2a292b;
+    --buttonbg: #2e2e30;
+    --buttonbg-hover: #353437;
     --buttonbg-active: #3f3c40;
-    --buttonoutline: #2F2F32;
+    --buttonoutline: #343435;
+    --buttonoutline-dark: #272728;
+
+    --buttonbg: #38383a;
+    --buttonbg-hover: #4c4a4e;
+    --buttonbg-active: #3f3c40;
+    --buttonoutline: #3e3e41;
+    --buttonoutline-hover: #555558;
+    --buttonoutline-dark: #272728;
 
     --pillbg: #2F2F32;
 }
@@ -23,14 +38,21 @@
     height: 24px;
     margin: 0;
     padding: 0 8px;
-    border: none;
+    border: solid 1px var(--inputoutline);
     border-radius: 4px;
     background: var(--inputbg);
     color: var(--text);
     font-size: 14px;
     font-weight: 400;
+    outline: none;
 }
-
+.apply-btn-styles input[type=text]:hover {
+    border: solid 1px var(--inputoutline-hover);
+}
+.apply-btn-styles input[type=text]:focus {
+    border: solid 1px var(--inputoutline-active);
+    outline: solid 1px var(--inputoutline-active)
+}
 
 
 /* Slider input */
@@ -168,12 +190,69 @@
     flex-direction: row;
     align-items: center;
 }
-.apply-btn-styles .under-input-checkbox input {
-    margin: 4px;
-}
 .apply-btn-styles .under-input-checkbox p {
     pointer-events: none;
     user-select: none;
+    margin-left: 8px;
+}
+.apply-btn-styles .checkbox {
+    display: block;
+    position: relative;
+    height: 18px;
+    width: 18px;
+    background: var(--inputbg);
+    border: solid 1px var(--inputoutline);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    overflow: hidden;
+    user-select: none;
+
+    transition: background 0.4s;
+}
+.apply-btn-styles .checkbox:hover {
+    border-color: var(--inputoutline-hover-lte);
+}
+.apply-btn-styles .checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.apply-btn-styles .checkbox .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.apply-btn-styles .checkbox:hover {
+    transition: background 0.7s;
+    background: var(--inputbg-hover-tint);
+}
+.apply-btn-styles .checkbox input:checked ~ .checkmark {
+    background-color: var(--input-hcolor);
+}
+.apply-btn-styles  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.apply-btn-styles .checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+/* Style the checkmark */
+.apply-btn-styles .checkbox .checkmark:after {
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 
@@ -243,10 +322,16 @@
     left: 0;
     right: 0;
     bottom: 0;
+    border: solid 1px var(--inputoutline);
     border-radius: 11px;
     background: var(--inputbg);
     -webkit-transition: .4s;
     transition: .4s;
+}
+.apply-btn-styles .switch-slider:hover {
+    transition: background 0.7s;
+    background: var(--inputbg-hover-tint);
+    border-color: var(--inputoutline-hover-lte);
 }
 .apply-btn-styles .switch-slider:before {
     position: absolute;
@@ -258,8 +343,8 @@
     transform: translate(0, -50%);
     border-radius: 50%;
     background: var(--text);
-    -webkit-transition: .4s;
-    transition: .4s;
+    -webkit-transition: .3s;
+    transition: .3s;
 }
 .apply-btn-styles .switch input:checked + .switch-slider {
     background: var(--input-hcolor);
@@ -294,8 +379,9 @@
     align-items: center;
     justify-content: center;
     min-height: 22px;
-    border: solid 2px var(--buttonoutline);
+    border: solid 1px var(--buttonoutline);
     border-radius: 4px;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.092);
     font-weight: 500;
     background: var(--buttonbg);
     color: var(--text);
@@ -305,6 +391,7 @@
 }
 .apply-btn-styles .buttons button:hover {
     background: var(--buttonbg-hover);
+    border-color: var(--buttonoutline-hover);
     transition: background 0.15s;
 }
 .apply-btn-styles .buttons button:active {

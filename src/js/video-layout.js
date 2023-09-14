@@ -12,11 +12,11 @@ initVideoGridApsects();
 function initVideoGridZoom() {
     var slider = document.querySelector(".content-pages .zoom input");
     slider.addEventListener("input", e => {
-        // console.log(e.originalTarget.value)
+        // console.log(e.target.value)
 
         // Setting width of elements
         document.querySelectorAll(".content-pages .room.page .video").forEach(element => {
-            element.style.width = videoScaling(element.getAttribute("aspectratio"), e.originalTarget.value) + "px";
+            element.style.width = videoScaling(element.getAttribute("aspectratio"), e.target.value) + "px";
             // console.log(element.getAttribute("aspectratio"))
         })
     })

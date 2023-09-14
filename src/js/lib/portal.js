@@ -2,6 +2,7 @@ console.log("Portal running")
 
 
 var Portal = {
+    iframe: undefined,
     cashe: {
         events: {},
         sentFirstMessage: false,
@@ -21,7 +22,6 @@ var Portal = {
     onMessage: (message) => {
         // console.log(message)
         if("dataReceived" in message){ // user-transferred data.  Other data is available, such as connection info.
-            console.log(message.dataReceived)
 
             // Type check
             if(typeof message.dataReceived === "object")
@@ -100,13 +100,16 @@ var Portal = {
                     
                     // I only use the first responce, or if they are creator use that because its trust worthy
                     if(!Portal.cashe.usedFullConfig || message.dataReceived.isCreator) {
-                        console.log("Got full config")
+                        // console.log("Got full config")
                         Portal.cashe.usedFullConfig = true;
 
-                        // Adding parts of config to db
-                        Portal.db.rooms = message.dataReceived.value.rooms;
+                        if(message.dataReceived.value.rooms.length > 0) {
+                            // Adding parts of config to db
+                            Portal.db.rooms = message.dataReceived.value.rooms;
+
+                            Portal.dispatch("updated-rooms");
+                        }
                         
-                        console.log(Portal.db)
                         Portal.dispatch("recive-full-config");
                     }
                 }
@@ -128,7 +131,6 @@ var Portal = {
                 }
             }
         }else if("guest-connected" === message.action) {
-            console.log(message)
             if(!Portal.cashe.peers[message.UUID]) {
                 // Adding user to peers list
                 Portal.cashe.peers[message.UUID] = {}
@@ -181,6 +183,9 @@ var Portal = {
         iframe.src = "https://vdo.ninja/alpha/?room="+object.c+"&vd=0&ad=0&autostart&cleanoutput"; // See the info at docs.vdo.ninja for options
         iframe.id = Portal.io.iframeID;
         document.body.appendChild(iframe);
+
+        // Adding it to Portal object (used so we can filter messages)
+        Portal.iframe = iframe;
     },
     addRooms: (array) => {
         Portal.db.rooms = Portal.db.rooms.concat(array);

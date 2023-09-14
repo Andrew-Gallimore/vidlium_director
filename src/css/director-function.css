@@ -10,9 +10,9 @@
     --second-color: #4879E7;
     --accent-color: #F1D051;
 
-    --page-bg: #1D1D1F;
-    --menunav-bg: #252528;
-    --regbox-bg: #28282B;
+    --body-bg: #1D1D1F;
+    --nav-bg-color: #252528;
+    --panel-bg-color: #28282B;
 
     --importbox-bg: #2E2E2F;
     --importbox-bg-transparent: #2e2e2f9e;
@@ -22,12 +22,25 @@
     --expandwindow-bg-hover: #383839;
     --expandwindow-bg-active: #4c4c4f;
 
+    /* Scrollbar styles */
     --scrollbar-track: rgba(0, 0, 0, 0.234);
     --scrollbar-thumb: #454447;
     --scrollbar-thumb-hover: #454447;
     --scrollbar-thumb-select: #979599;
 
+    /* Text Colors */
+    --text-color: #ffffff;
+    --text-color-midlight: #e8e8e8;
+    --text-color-mid: #B8B8B8;
+    --text-color-dark: #757575;
+
+    /* Font */
     --main-font: 'Heebo', sans-serif;
+
+    /* Menu btns */
+    --menu-btn-hover: #38373b;
+    --menu-btn-active: #4b4a4f;
+    --menu-btn-border-r: 4px;
 }
 
 /* Basic element styles */
@@ -39,26 +52,31 @@ h1 {
     font-size: 24px;
     font-weight: 700;
     margin: 0;
+    color: var(--text-color);
 }
 h2 {
     font-size: 24px;
     font-weight: 600;
     margin: 0;
+    color: var(--text-color);
 }
 h3 {
     font-size: 18px;
     font-weight: 600;
     margin: 0;
+    color: var(--text-color-mid);
 }
 h4 {
     font-size: 14px;
     font-weight: 600;
     margin: 0;
+    color: var(--text-color-midlight);
 }
 p {
     font-size: 14px;
     margin: 0;
-    color: #c4c4c4;
+    /* color: #c4c4c4; */
+    color: var(--text-color-mid);
 }
 input {
     font-size: 14px;
@@ -77,9 +95,9 @@ select {
     font-size: 14px;
     font-weight: 400;
 }
-iframe {
+/* iframe {
     display: none;
-}
+} */
 
 /* Scrollbar stylings */
 .scrollbar--dark {
@@ -121,7 +139,7 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    background: var(--page-bg);
+    background: var(--body-bg);
 }
 
 
@@ -133,7 +151,7 @@ body {
     grid-template-columns: 1fr auto 1fr;
     height: var(--top-nav-height);
     padding: 0 24px;
-    background: var(--menunav-bg);
+    background: var(--nav-bg-color);
     background: linear-gradient(45deg, #252528 0% 0%, #252528 75.94% 75.94%, rgba(72, 121, 231, 0.15) 100% 100%);
 }
 .top-nav > div {
@@ -144,16 +162,24 @@ body {
     display: flex;
     background: none;
     border: none;
-    padding: 0;
+    padding: 4px;
     cursor: pointer;
     margin-right: 24px;
+    border-radius: var(--menu-btn-border-r);
 }
 .top-nav .menu-opener img {
+    user-select: none;
     width: 36px;
     height: 36px;
 }
+.top-nav .menu-opener:hover {
+    background-color: var(--menu-btn-hover);
+}
+.top-nav .menu-opener:active {
+    background-color: var(--menu-btn-active);
+}
 .top-nav .stream-name {
-    color: #ffffff;
+    color: var(--text-color-midlight);
     user-select: none;
 }
 .top-nav .center {
@@ -176,32 +202,43 @@ body {
     align-items: center;
     background: none;
     border: none;
+    border-radius: var(--menu-btn-border-r);
     cursor: pointer;
+    
+    transition: background 0.2s;
 }
 .top-nav li button h2 {
     /* opacity: 0.65; */
-    color: #D1D1D1;
+    /* color: #D1D1D1; */
+    color: var(--text-color-mid);
     transition: color 0.2s;
     /* transition: opacity 0.2s; */
+}
+.top-nav li:hover button {
+    background: var(--menu-btn-hover);
+}
+.top-nav li:active button {
+    background: var(--menu-btn-active);
 }
 .top-nav li:hover button h2,
 .top-nav li:focus button h2 {
     /* opacity: 1; */
-    color: #ffffff;
+    /* color: #ffffff; */
+    /* color: var(--second-color); */
 }
 .top-nav li button .img-wrapper {
     position: relative;
     width: 36px;
     height: 36px;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 .top-nav li button img {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     transition: opacity 0.2s;
 }
 .top-nav li button .color {
@@ -235,7 +272,7 @@ body {
     justify-content: center;
 }
 .top-nav .director-list .icon p {
-    color: white;
+    /* color: white; */
 }
 
 /* Warning block of the top nav */
@@ -306,7 +343,7 @@ body {
 
     min-width: 150px;
     width: 13vw;
-    background: var(--menunav-bg);
+    background: var(--nav-bg-color);
     background: linear-gradient(190deg, #252528 0% 0%, #252528 63.15% 63.15%, rgba(123, 53, 137, 0.7) 84.38% 84.38%, rgba(72, 121, 231, 0.7) 100% 100%);
 }
 /* This add the little fillet (interverted border radius looking thing) to the side the left pannel and the top navbar */
@@ -319,7 +356,7 @@ body {
     height: 50px;
     width: 20px;
     border-top-left-radius: 20px;
-    box-shadow: 0px -20px 0 0 var(--menunav-bg); /* This is where the magic happens! */
+    box-shadow: 0px -20px 0 0 var(--nav-bg-color); /* This is where the magic happens! */
 }
 .all-controls .left-panel .large-lists {
     /* flex-grow: 100; */
@@ -336,7 +373,7 @@ body {
     direction: ltr;
 }
 .all-controls .left-panel .large-lists h1 {
-    color: #E6E6E6;
+    /* color: #E6E6E6; */
     padding-left: 8px;
     margin: 12px 0;
 }
@@ -389,7 +426,7 @@ body {
 .all-controls .left-panel .list button h3 {
     flex-grow: 100;
     text-align: left;
-    color: #D1D1D1;
+    /* color: #D1D1D1; */
     font-size: 18px;
 }
 .all-controls .left-panel .list button .sending {
@@ -431,7 +468,7 @@ body {
     height: 24px;
     margin-right: 4px;
     background: var(--expandwindow-bg);
-    border: solid 2px var(--buttonbg);
+    border: solid 2px var(--buttonoutline-dark);
     /* --buttonbg and related colors are found on btn-styles.css */
     border-radius: 4px;
     transition: background 0.15s;
@@ -468,7 +505,7 @@ body {
     width: 24px;
     height: 24px;
     background: var(--expandwindow-bg);
-    border: solid 2px var(--buttonbg);
+    border: solid 2px var(--buttonoutline-dark);
     /* --buttonbg and related colors are found on btn-styles.css */
     border-radius: 4px;
     transition: background 0.15s;
@@ -494,7 +531,7 @@ body {
     margin-bottom: 4px;
 }
 .all-controls .director-controls .label h3 {
-    color: #D1D1D1;
+    /* color: #D1D1D1; */
     font-size: 16px;
 }
 .all-controls .director-controls .label img {
@@ -564,7 +601,7 @@ body {
     margin: 20px 20px;
     padding: 8px;
     margin-right: 0;
-    background: var(--regbox-bg);
+    background: var(--panel-bg-color);
     border-radius: 7px;
 }
 .content-pages .room.page {
@@ -599,7 +636,7 @@ body {
     direction: rtl;
 }
 .content-pages .room.page .video {
-    background: rgb(255, 255, 255);
+    background: rgb(0, 0, 0);
     margin: 8px;
 }
 .content-pages .room.page .video.one {
@@ -633,7 +670,7 @@ body {
     margin: 20px 20px;
     padding-top: 12px;
     padding-bottom: 8px;
-    background: var(--regbox-bg);
+    background: var(--panel-bg-color);
     border-radius: 7px;
 }
 
@@ -674,7 +711,7 @@ body {
     border-top: 1px solid #555555;
 }
 .insp-pages .insp-opener .open h3 {
-    color: #C6C6C6;
+    /* color: #C6C6C6; */
     font-weight: 400;
     text-align: left;
     line-height: 20px;
@@ -746,7 +783,7 @@ body {
 }
 /* THE Label Styles are based on the text being an h3 at a particular height */
 .insp-pages .settings-grid .label {
-    color: #C6C6C6;
+    /* color: #C6C6C6; */
 }
 .insp-pages .settings-grid .label h3 {
     margin-top: 4px;

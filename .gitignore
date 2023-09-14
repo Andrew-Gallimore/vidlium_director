@@ -4,3 +4,7 @@
 
 # Temporary things used during merging two developement streams
 /temp
+
+# Removing SSL Certs (could contain private info)
+*.cert
+*.key
