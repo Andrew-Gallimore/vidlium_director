@@ -46,7 +46,24 @@ function startup() {
         // localData.safeset('createdStream', true);
     }
 
+    loadPortal()
+}
+startup();
 
+
+// Used in startup for the URL C values
+function createNewC() {
+    var rand = Math.floor(Math.random() * 100000000000000).toString(36);
+    rand.replace("--d", "ifykyk") //replacing the deliniator with random str so that it doesn't randomly break the c-value
+
+    var rand2 = Math.floor(Math.random() * 100000000000000).toString(36);
+    rand2.replace("--d", "ifykyk") //replacing the deliniator with random str so that it doesn't randomly break the c-value
+
+    addURLParameter("c", btoa(rand + '--d' + rand2));
+}
+
+// Opens the a portal instance from the Portal.js Library
+function loadPortal() {
     // Portal loading error States
     Portal.on('channel-empty', () => {
         console.log("> Coms Empty")
@@ -91,7 +108,7 @@ function startup() {
     Portal.on('remove-director', (UUID) => {
         var listLocation = ".director-list";
 
-        console.log("> Adding a director")
+        console.log("> Removing a director")
         document.querySelector(listLocation + " [uuid='" + UUID + "']").remove()
     })
 
@@ -108,20 +125,6 @@ function startup() {
     //     c: "testingVIDLIUM",
     //     p: "testing"
     // })
-
-}
-startup();
-
-
-// Used in startup for the URL C values
-function createNewC() {
-    var rand = Math.floor(Math.random() * 100000000000000).toString(36);
-    rand.replace("--d", "ifykyk") //replacing the deliniator with random str so that it doesn't randomly break the c-value
-
-    var rand2 = Math.floor(Math.random() * 100000000000000).toString(36);
-    rand2.replace("--d", "ifykyk") //replacing the deliniator with random str so that it doesn't randomly break the c-value
-
-    addURLParameter("c", btoa(rand + '--d' + rand2));
 }
 
 // Used in startup for when anonymous director icons need to be made
@@ -185,19 +188,37 @@ function userRemovingRoom(viewID) {
 // Checks what rooms are loaded, and sees if there are any updates needed
 // Should only be called on "updated-rooms" from the Portal
 function regenerateRooms() {
-    // TODO: Change this over to a system where it deletes all the views and adds the new ones
+    var foundPrimary = false;
     for (const room of Portal.db.rooms) {
-        if(!(room.viewID in views))
-        addVDORoomView(room);
-        addViewButton(room.viewID);
+        // Setting this room as the primary one to load if none are currently in view
+        if(room.primaryView) foundPrimary = room.viewID;
 
-        generateVdoRoom(room.roomData);
+        // Loading the rooms that aren't in views yet
+        if(!(room.viewID in views)) {
+            addVDORoomView(room);
+            addViewButton(room.viewID);
+
+            generateVdoRoom(room.roomData);
+        }
+
+        // TODO: add loop over all views, to see if there are any that aren't in the portal db, and deleting them.
+    }
+
+    // Choosing what room view to display if none are displayed
+    if(!activeViewID) {
+        if(foundPrimary) {
+            setCurrentView(foundPrimary);
+        }else {
+            var viewID = Object.keys(views)[0];
+            setCurrentView(viewID);
+        }
     }
 }
 
 // Starts up a vdo.ninja room
 function generateVdoRoom(roomData) {
-    var room = new vdo.Room("testROOOMID");
+    console.log("Generating room: " + "testROOOMID");
+    var room = new vdo.Room("testROOOMID", {codirectorPassword: "coPassword"});
     room.register()
     .then(data => {
         // Success
@@ -217,20 +238,35 @@ function generateVdoRoom(roomData) {
         console.log("Person joining event!")
         console.log(person)
     })
+    // When the primary video element is created for the person
+    room.on("primary-video-created", e => {
+        // e.preventDefault();
+        console.log("Primary video created event!")
+        console.log(e)
+    })
+    // When a screenshare video element is created for the person
+    room.on("screenshare-video-created", e => {
+        // e.preventDefault();
+        console.log("Screenshare video created event!")
+        console.log(e)
+    })
     // Fired after all the information is gathered for the guest
     room.on("person-connected", person => {
         // e.preventDefault();
         console.log("LOADED GUEST!!!!!!")
         console.log(person)
         person.addToScene();
+
+        person.primaryFeed.classList.add("video")
+        person.primaryFeed.setAttribute("aspectratio", person.config.aspectRatio)
+
+        var temp = document.createElement("div")
+        temp.classList.add("person");
+        temp.appendChild(person.primaryFeed)
+
+        document.querySelector(".page.room .scroll").appendChild(temp)
     })
     
-    
-    room.on("person-video-created", e => {
-        // e.preventDefault();
-        console.log("Video created event!")
-        console.log(e)
-    })
     room.on("person-left", e => {
         // e.preventDefault();
         console.log("Person Left!")

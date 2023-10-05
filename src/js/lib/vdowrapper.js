@@ -25,6 +25,13 @@ var vdo = {
             }else {
                 this.config.roomPassword = false;
             }
+            // Codirector Password
+            if(options.codirectorPassword) {
+                this.config.codirectorPassword = options.codirectorPassword.toString();
+            }else {
+                this.config.codirectorPassword = false;
+            }
+
             // Name
             if(options.name) {
                 this.config.name = options.name.toString();
@@ -78,193 +85,16 @@ var vdo = {
             });
         }
 
-        // Used for setting up the iframe of the room with vdo.ninja
-        async register(options={}) {
-            // Loading the vdo.ninja in an iframe
-            // Making the iframe element
-            var iframe = document.createElement("iframe");
-            // iframe.contentWindow.console.log = () => { /* nop */ }; //Silencing iframe console
-            iframe.classList.add("vdon");
-            iframe.classList.add("_" + this.config.roomID);
-
-            if(options.codirector) {
-                iframe.src = "https://vdo.ninja/alpha/?sendframes&director=" + this.config.roomID + "&codirector=" + options.codirector.toString();
-            }else {
-                iframe.src = "https://vdo.ninja/alpha/?sendframes&director=" + this.config.roomID;
-            }
-            // iframe.allow = "autoplay; camera; microphone; fullscreen; picture-in-picture;";
-            iframe.allow = "document-domain;encrypted-media;sync-xhr;usb;web-share;cross-origin-isolated;accelerometer;midi;geolocation;autoplay;camera;microphone;fullscreen;picture-in-picture;display-capture;";
-            iframe.sandbox = "allow-scripts allow-forms allow-pointer-lock allow-same-origin";
-
-            document.body.appendChild(iframe);
-            this.iframe = iframe;
-
-
+        // Creates event listeners for when a person is joining/leaving
+        createConnectionListeners(iframe) {
             // Setting up lisseners for events from the iframe
             var ivents = new iventLissener({
                 parent: this //I need to pass in the Room class as part of the data because otherwise 'this' is the iventLissener
             }, iframe);
             ivents.on((e, data) => {
-                // Director related lisseners for events from iframe
-                // Lissening for the amdirector status
-                if(e.data.action === "director") {
-                    if(e.data.value == true) {
-                        // Calling director-status room event
-                        data.parent.dispatch("director-status", {
-                            directorStatus: true,
-                            codirectorStatus: false,
-                            message: "You are the director and not a codirector"
-                        });
-                        // Updating me data
-                        data.parent.me.config.amdirector = true;
-                        data.parent.me.config.amcodirector = false;
-
-                    }else {
-                        // Updating me data
-                        data.parent.me.config.amdirector = false;
-
-                        // Should wait for codirector message if one is possibly coming
-                        if(!data.parent.iframe.src.includes("&codirector")) {
-                            // If not...
-                            // Calling director-status room event
-                            data.parent.dispatch("director-status", {
-                                directorStatus: false,
-                                codirectorStatus: false,
-                                message: "You are not the director nor a codirector"
-                            });
-                            // Updating me data
-                            data.parent.me.config.amcodirector = false;
-                        }
-                    }
-                }
-                // Lissening for the amcodirector status
-                if(e.data.action === "codirector" && e.data.value == true) {
-                    // Calling director-status room event
-                    data.parent.dispatch("director-status", {
-                        directorStatus: data.parent.me.config.amdirector,
-                        codirectorStatus: true,
-                        message: "You are a codirector but not a director"
-                    });
-                    // Updating me data
-                    data.parent.me.config.amcodirector = true;
-                }else if(e.data.value === "requestCoDirector" && e.data.action === "rejected") {
-                    // Calling director-status room event
-                    data.parent.dispatch("director-status", {
-                        directorStatus: data.parent.me.config.amdirector,
-                        codirectorStatus: false,
-                        message: "You are not the codirector nor a director"
-                    });
-                    // Updating me data
-                    data.parent.me.config.amcodirector = false;
-                }
-
                 // Guest related lisseners for events from iframe
-                if(e.data.frame) {
-                    // These are video & audio frames coming from the vdo.ninja iframe
-                    var media = data.parent.media;
-                    if(!media.tracks[e.data.trackID]) {
-                        // Creating a new track since it hasn't been made yet
-                        console.log(e)
-                        media.tracks[e.data.trackID] = {};
-                        media.tracks[e.data.trackID].streamID = e.data.streamID;
-                        media.tracks[e.data.trackID].generator = new MediaStreamTrackGenerator({kind:e.data.kind});
-                        media.tracks[e.data.trackID].stream = new MediaStream([media.tracks[e.data.trackID].generator]);
-                        media.tracks[e.data.trackID].frameWriter = media.tracks[e.data.trackID].generator.writable.getWriter();
-                        
-                        // Adding the data to the new track
-                        media.tracks[e.data.trackID].frameWriter.write(e.data.frame);
-                        
-                        if(!media.streams[e.data.streamID]) {
-                            // If the stream isn't made yet, make it
-                            media.streams[e.data.streamID] = document.createElement("video");
-                            media.streams[e.data.streamID].id = "video_"+e.data.streamID;
-                            media.streams[e.data.streamID].muted = true;
-                            // TODO: Need to unmute it when the user intacts with the page
-                            media.streams[e.data.streamID].autoplay = true;
-                            // media.streams[e.data.streamID].controls = true;
-                            media.streams[e.data.streamID].srcObject = media.tracks[e.data.trackID].stream;
-
-
-                            // media.streams[e.data.streamID + "2"] = document.createElement("video");
-                            // media.streams[e.data.streamID + "2"].id = "video_"+e.data.streamID;
-                            // media.streams[e.data.streamID + "2"].muted = true;
-                            // // TODO: Need to unmute it when the user intacts with the page
-                            // media.streams[e.data.streamID + "2"].autoplay = true;
-                            // // media.streams[e.data.streamID].controls = true;
-                            // media.streams[e.data.streamID + "2"].srcObject = media.tracks[e.data.trackID].stream;
-            
-
-                            // Making the new video element in the page
-                            console.log("Made Video Element in custom class")
-                            
-                            data.parent.getPeople({streamID: e.data.streamID}, people => {
-                                if(people) {
-                                    var person = people[0];
-                                    
-                                    // Sending out event that the video is created
-                                    data.parent.dispatch("person-video-created", {
-                                        personObject: person,
-                                        videoElement: media.streams[e.data.streamID]
-                                    });
-
-                                    // Updating the checklist for if the guest is fully joined
-                                    person.loadChecklist.videoElement = true;
-                                    data.parent.checkGuestLoaded(person);
-                                }
-                            })
-
-                            document.body.append(media.streams[e.data.streamID])
-                            // document.body.append(media.streams[e.data.streamID + "2"])
-                            // for (let i = 0; i < peopleObjects.length; i++) {
-                            //     if(peopleObjects[i].streamID === e.data.streamID) {
-                            //         // Adding the new video element to peopleObject
-                            //         peopleObjects[i].stream = media.streams[e.data.streamID];
-    
-                            //         guestVideoCreated(peopleObjects[i]);
-    
-                            //         // // And if the person is already defined, initiate creating their front end element
-                            //         // if(peopleObjects[i].type) {
-                            //         // 	console.log("Creating Now")
-                            //         // 	if(peopleObjects[i].element) {
-                            //         // 		createPersonVideo(peopleObjects[i].element, media.streams[e.data.streamID]);
-                            //         // 	}else {
-                            //         // 		// This function grabs the labels of the person, before running the callback, which is to create the person element
-                            //         // 		loadLabel(e.data.streamID, createPersonElement, e.data.streamID);
-                            //         // 		// createPersonElement(e.data.streamID);
-                            //         // 	}
-                            //         // }
-                            //     }
-                            // }
-                            // console.log(peopleObjects)
-                        }else {
-                            // If there is already a stream for this, remove any tracks for it, and add the new one(s)?
-                            if(e.data.kind == "video") {
-                                media.streams[e.data.streamID].srcObject.getVideoTracks().forEach(trk=>{
-                                    media.streams[e.data.streamID].srcObject.removeTrack(trk);
-                                });
-                                media.streams[e.data.streamID + "2"].srcObject.getVideoTracks().forEach(trk=>{
-                                    media.streams[e.data.streamID + "2"].srcObject.removeTrack(trk);
-                                });
-                            }else if(e.data.kind == "audio") {
-                                media.streams[e.data.streamID].srcObject.getAudioTracks().forEach(trk=>{
-                                    media.streams[e.data.streamID].srcObject.removeTrack(trk);
-                                });
-                                media.streams[e.data.streamID + "2"].srcObject.getAudioTracks().forEach(trk=>{
-                                    media.streams[e.data.streamID + "2"].srcObject.removeTrack(trk);
-                                });
-                            } 
-                            media.tracks[e.data.trackID].stream.getTracks().forEach(trk=>{
-                                media.streams[e.data.streamID].srcObject.addTrack(trk);
-                            });
-                            media.tracks[e.data.trackID].stream.getTracks().forEach(trk=>{
-                                media.streams[e.data.streamID + "2"].srcObject.addTrack(trk);
-                            });
-                        }
-                    }else {
-                        // Adding the data to an existing track
-                        media.tracks[e.data.trackID].frameWriter.write(e.data.frame);
-                    }
-                }else if(e.data.action === "director-connected") {
+                if(e.data.action === "director-connected") {
+                    //TODO: Check with steve if there is a reason this event doesn't fire
                     // A director has connected
 
                     // First checking if there is a person object for them
@@ -394,7 +224,7 @@ var vdo = {
                         // User Muted their Video
                         if(info.video_muted_init === null || info.video_muted_init === false) {
                             person.config.userMutedVideo = false;
-                        }else if(info.directorVideoMuted === true){
+                        }else if(info.video_muted_init === true){
                             person.config.userMutedVideo = true;
                         }
 
@@ -453,7 +283,7 @@ var vdo = {
                     // I have seen delays to reciving the audio/video tracks only be between 1-2 and 40-50-ish
                     setTimeout(() => {
                         // After 100ms the video & audio streams are likely loaded
-                        console.log("Finished loading tracks?")
+                        console.log("Finished loading tracks? " + e.data.streamID)
                         data.parent.getPeople({streamID: e.data.streamID}, people => {
                             if(people) {
                                 var person = people[0];
@@ -472,35 +302,9 @@ var vdo = {
                             }
                         })
                         setTimeout(() => {
-                            data.parent.getPeople({streamID: e.data.streamID}, people => {
-                                if(people) {
-                                    var person = people[0];
-
-                                    // Making the person's video from an iframe solo view
-                                    console.log(person)
-                                    if(person.loadChecklist.streamTracks && !person.loadChecklist.videoElement) {
-                                        // The iframe API isn't sending video frames for this person (it should have sent some by now)
-                                        var iframe = document.createElement("iframe");
-                                        iframe.id = "video_" + person.config.streamID;
-                                        iframe.src = "https://vdo.ninja/?view=" + person.config.streamID + "&solo&room=" + person.config.roomID;
-
-                                        person.videoElement = iframe;
-                                        person.loadChecklist.videoElement = true;
-
-                                        // Sending out event that the video is created
-                                        data.parent.dispatch("person-video-created", {
-                                            personObject: person,
-                                            videoElement: person.videoElement
-                                        });
-                                        document.body.append(person.videoElement)
-                                    }
-    
-                                    // Updating the checklist for if the guest is fully joined
-                                    data.parent.checkGuestLoaded(person);
-                                }
-                            })
-                        }, 400, data, e);
-                    }, 100, data, e);
+                            data.parent.buildPersonVideo(e.data.streamID, "URL");
+                        }, 200, data, e);
+                    }, 150, data, e);
                 }else if(e.data.action === "new-video-track-added") {
                     // Logging how long it took to load the track
                     var date = new Date;
@@ -534,6 +338,25 @@ var vdo = {
                             // Setting the value
                             person.config.aspectRatio = e.data.value;
 
+                            // Adding the aspect ratio to the associated video element
+                            this.getPeople({streamID: e.data.streamID}, people => {
+                                if(people) {
+                                    var person = people[0];
+
+                                    if(person.primaryFeed) {
+                                        person.primaryFeed.style.aspectRatio = person.config.aspectRatio;
+                                    }
+                                }else if(e.data.streamID.slice(-2) === ":s") {
+                                    this.getPeople({streamID: e.data.streamID.slice(0, -2)}, people => {
+                                        var person = people[0];
+
+                                        if(person.screenShareFeed) {
+                                            person.screenShareFeed.style.aspectRatio = person.config.aspectRatio;
+                                        }
+                                    });
+                                }
+                            });
+
                             // Updating the checklist for if the guest is fully joined
                             if(!person.loadChecklist.aspectRatio) {
                                 person.loadChecklist.aspectRatio = true;
@@ -564,6 +387,308 @@ var vdo = {
                     }
                 }
             })
+        }
+
+        // Creates event listeners for when my own directors' status' comes in
+        createDirectorListeners(iframe) {
+            // Setting up lisseners for events from the iframe
+            var ivents = new iventLissener({
+                parent: this //I need to pass in the Room class as part of the data because otherwise 'this' is the iventLissener
+            }, iframe);
+            ivents.on((e, data) => {
+                // Lissening for the amdirector status
+                if(e.data.action === "director") {
+                    if(e.data.value == true) {
+                        // Calling director-status room event
+                        data.parent.dispatch("director-status", {
+                            directorStatus: true,
+                            codirectorStatus: false,
+                            message: "You are the director and not a codirector"
+                        });
+                        // Updating me data
+                        data.parent.me.config.amdirector = true;
+                        data.parent.me.config.amcodirector = false;
+
+                    }else {
+                        // Updating me data
+                        data.parent.me.config.amdirector = false;
+
+                        // Should wait for codirector message if one is possibly coming
+                        if(!data.parent.iframe.src.includes("&codirector")) {
+                            // If not...
+                            // Calling director-status room event
+                            data.parent.dispatch("director-status", {
+                                directorStatus: false,
+                                codirectorStatus: false,
+                                message: "You are not the director nor a codirector"
+                            });
+                            // Updating me data
+                            data.parent.me.config.amcodirector = false;
+                        }
+                    }
+                }
+                // Lissening for the amcodirector status
+                if(e.data.value === "requestCoDirector" && e.data.action === "approved") {
+                    // Calling director-status room event
+                    data.parent.dispatch("director-status", {
+                        directorStatus: data.parent.me.config.amdirector,
+                        codirectorStatus: true,
+                        message: "You are a codirector but not a director"
+                    });
+                    // Updating me data
+                    data.parent.me.config.amcodirector = true;
+                }else if(e.data.value === "requestCoDirector" && e.data.action === "rejected") {
+                    // Calling director-status room event
+                    data.parent.dispatch("director-status", {
+                        directorStatus: data.parent.me.config.amdirector,
+                        codirectorStatus: false,
+                        message: "You are not the codirector nor a director"
+                    });
+                    // Updating me data
+                    data.parent.me.config.amcodirector = false;
+                }
+            });
+        }
+
+        // Creates event listeners for when a video frames come in
+        createFrameListeners(iframe) {
+            // Setting up lisseners for events from the iframe
+            var ivents = new iventLissener({
+                parent: this //I need to pass in the Room class as part of the data because otherwise 'this' is the iventLissener
+            }, iframe);
+            ivents.on((e, data) => {
+                // Guest related lisseners for events from iframe
+                if(e.data.frame) {
+                    // These are video & audio frames coming from the vdo.ninja iframe
+                    var media = data.parent.media;
+                    if(!media.tracks[e.data.trackID]) {
+                        // Creating a new track since it hasn't been made yet
+                        console.log(e)
+                        media.tracks[e.data.trackID] = {};
+                        media.tracks[e.data.trackID].streamID = e.data.streamID;
+                        media.tracks[e.data.trackID].generator = new MediaStreamTrackGenerator({kind:e.data.kind});
+                        media.tracks[e.data.trackID].stream = new MediaStream([media.tracks[e.data.trackID].generator]);
+                        media.tracks[e.data.trackID].frameWriter = media.tracks[e.data.trackID].generator.writable.getWriter();
+                        
+                        // Adding the data to the new track
+                        media.tracks[e.data.trackID].frameWriter.write(e.data.frame);
+                        
+                        // If the stream isn't made yet, make it
+                        if(!media.streams[e.data.streamID]) {
+                            data.parent.buildPersonVideo(e.data.streamID, "data-feed", media, e.data.trackID);
+
+                        }else {
+                            // Since there is already a stream for this, remove any tracks for it, and add the new one(s)?
+                            if(e.data.kind == "video") {
+                                media.streams[e.data.streamID].srcObject.getVideoTracks().forEach(trk=>{
+                                    media.streams[e.data.streamID].srcObject.removeTrack(trk);
+                                });
+                                media.streams[e.data.streamID + "2"].srcObject.getVideoTracks().forEach(trk=>{
+                                    media.streams[e.data.streamID + "2"].srcObject.removeTrack(trk);
+                                });
+                            }else if(e.data.kind == "audio") {
+                                media.streams[e.data.streamID].srcObject.getAudioTracks().forEach(trk=>{
+                                    media.streams[e.data.streamID].srcObject.removeTrack(trk);
+                                });
+                                media.streams[e.data.streamID + "2"].srcObject.getAudioTracks().forEach(trk=>{
+                                    media.streams[e.data.streamID + "2"].srcObject.removeTrack(trk);
+                                });
+                            } 
+                            media.tracks[e.data.trackID].stream.getTracks().forEach(trk=>{
+                                media.streams[e.data.streamID].srcObject.addTrack(trk);
+                            });
+                            media.tracks[e.data.trackID].stream.getTracks().forEach(trk=>{
+                                media.streams[e.data.streamID + "2"].srcObject.addTrack(trk);
+                            });
+                        }
+                    }else {
+                        // Adding the data to an existing track
+                        media.tracks[e.data.trackID].frameWriter.write(e.data.frame);
+                    }
+                }
+            });
+        }
+
+        // 'media' and 'trackID' is only needed for the "data-feed" format
+        buildPersonVideo(streamID, format, media, trackID) {
+            if(format === "data-feed") {
+                console.log("Made Video Element in custom class")
+
+                // Making a media stream for the feed
+                media.streams[streamID] = document.createElement("video");
+                // media.streams[streamID].id = "video_"+streamID;
+                media.streams[streamID].muted = true;
+                media.streams[streamID].autoplay = true;
+                media.streams[streamID].srcObject = media.tracks[trackID].stream;
+                // TODO: Need to unmute it when the user intacts with the page
+
+                // Adding that feed to the person
+                this.getPeople({streamID: streamID}, people => {
+                    if(people) {
+                        var person = people[0];
+
+                        // Building div wrapper around video
+                        var finalELem = document.createElement("div");
+                        finalELem.classList.add("vdowrapper-feed")
+                        finalELem.setAttribute("data-streamid", streamID)
+                        finalELem.setAttribute("data-feedType", "primary")
+                        finalELem.appendChild(media.streams[streamID]);
+                        if(person.config.aspectRatio) {
+                            finalELem.style.aspectRatio = person.config.aspectRatio;
+                        }
+                        
+                        // Sending out event that the video is created
+                        this.dispatch("primary-video-created", {
+                            personObject: person,
+                            videoElement: finalELem
+                        });
+
+                        // This automatically overwites the primary video if there is already one created (likely an iframe type)
+                        // Updating the checklist for if the guest is fully joined
+                        person.loadChecklist.primaryFeed = true;
+                        person.primaryFeed = finalELem;
+                        this.checkGuestLoaded(person);
+
+                    }else if(streamID.slice(-2) === ":s") {
+                        // Its likely that this feed is a screenshare of a guest
+                        this.getPeople({streamID: streamID.slice(0, -2)}, people => {
+                            if(people) {
+                                var person = people[0];
+ 
+                                // Building div wrapper around video
+                                var finalELem = document.createElement("div");
+                                finalELem.classList.add("vdowrapper-feed")
+                                finalELem.setAttribute("data-streamid", streamID)
+                                finalELem.setAttribute("data-feedType", "screenshare")
+                                finalELem.appendChild(media.streams[streamID]);
+                                if(person.config.aspectRatio) {
+                                    finalELem.style.aspectRatio = person.config.aspectRatio;
+                                }
+                                
+                                // Sending out event that the video is created
+                                this.dispatch("screenshare-video-created", {
+                                    personObject: person,
+                                    videoElement: finalELem
+                                });
+
+                                // This automatically overwites the primary video if there is already one created (likely an iframe type)
+                                // Updating the checklist for if the guest is fully joined
+                                person.loadChecklist.screenShareFeed = true;
+                                person.screenShareFeed = finalELem;
+                                this.checkGuestLoaded(person);
+                            }
+                        })
+                    }
+                })
+            }else if(format === "URL") {
+                this.getPeople({streamID: streamID}, people => {
+                    if(people) {
+                        var person = people[0];
+
+                        // Checking that there isn't already a primary feed
+                        if(person.loadChecklist.streamTracks && !person.loadChecklist.primaryFeed) {
+                            // Making the person's video from an iframe solo view
+                            console.log("Made their feed from iframe " + streamID)
+
+                            // The iframe API isn't sending video frames for this person (it should have sent some by now)
+                            var iframe = document.createElement("iframe");
+                            iframe.id = "video_" + person.config.streamID;
+                            iframe.src = "https://vdo.ninja/?view=" + person.config.streamID + "&solo&room=" + person.config.roomID + "&nocontrols&cv&transparent";
+
+                            // Building div wrapper around video
+                            var finalELem = document.createElement("div");
+                            finalELem.classList.add("vdowrapper-feed")
+                            finalELem.setAttribute("data-streamid", streamID)
+                            finalELem.setAttribute("data-feedType", "primary")
+                            finalELem.appendChild(iframe);
+                            if(person.config.aspectRatio) {
+                                finalELem.style.aspectRatio = person.config.aspectRatio;
+                            }
+
+                            person.primaryFeed = finalELem;
+                            person.loadChecklist.primaryFeed = true;
+
+                            // Sending out event that the video is created
+                            this.dispatch("primary-video-created", {
+                                personObject: person,
+                                videoElement: person.primaryFeed
+                            });
+                        }
+
+                        // Updating the checklist for if the guest is fully joined
+                        this.checkGuestLoaded(person);
+                    }else if(streamID.slice(-2) === ":s") {
+                        // Its likely that this feed is a screenshare of a guest
+                        this.getPeople({streamID: streamID.slice(0, -2)}, people => {
+                            if(people) {
+                                var person = people[0];
+
+                                // Checking that there isn't already a primary feed
+                                if(person.loadChecklist.streamTracks && !person.loadChecklist.screenshareFeed) {
+                                    // Making the person's video from an iframe solo view
+                                    console.log("Made their feed from iframe " + streamID)
+
+                                    // The iframe API isn't sending video frames for this person (it should have sent some by now)
+                                    var iframe = document.createElement("iframe");
+                                    iframe.id = "video_" + streamID;
+                                    iframe.src = "https://vdo.ninja/?view=" + streamID + "&solo&room=" + person.config.roomID;
+
+                                    // Building div wrapper around video
+                                    var finalELem = document.createElement("div");
+                                    finalELem.classList.add("vdowrapper-feed")
+                                    finalELem.setAttribute("data-streamid", streamID)
+                                    finalELem.setAttribute("data-feedType", "screenshare")
+                                    finalELem.appendChild(iframe);
+                                    if(person.config.aspectRatio) {
+                                        finalELem.style.aspectRatio = person.config.aspectRatio;
+                                    }
+
+                                    person.screenShareFeed = finalELem;
+                                    person.loadChecklist.screenShareFeed = true;
+
+                                    // Sending out event that the video is created
+                                    this.dispatch("screenshare-video-created", {
+                                        personObject: person,
+                                        videoElement: person.screenShareFeed
+                                    });
+                                }
+
+                                // Updating the checklist for if the guest is fully joined
+                                this.checkGuestLoaded(person);
+                            }
+                        })
+                    }
+                })
+            }
+        }
+
+        // Used for loading the iframe of the room with vdo.ninja
+        async register() {
+            // Loading the vdo.ninja in an iframe
+
+            // Making the iframe element
+            var iframe = document.createElement("iframe");
+            iframe.classList.add("vdon");
+            iframe.classList.add("_" + this.config.roomID);
+
+            if(this.config.codirectorPassword !== false) {
+                iframe.src = "https://vdo.ninja/alpha/?sendframes&director=" + this.config.roomID + "&codirector=" + this.config.codirectorPassword;
+            }else {
+                iframe.src = "https://vdo.ninja/alpha/?sendframes&director=" + this.config.roomID;
+            }
+            iframe.allow = "autoplay; camera; microphone; fullscreen; picture-in-picture;";
+            // iframe.allow = "document-domain;encrypted-media;sync-xhr;usb;web-share;cross-origin-isolated;accelerometer;midi;geolocation;autoplay;camera;microphone;fullscreen;picture-in-picture;display-capture;";
+            iframe.sandbox = "allow-scripts allow-forms allow-pointer-lock allow-same-origin";
+
+            document.body.appendChild(iframe);
+            this.iframe = iframe;
+
+            // Setting up joining/leaving listeners from the iframe
+            this.createDirectorListeners(iframe);
+            // Setting up joining/leaving listeners from the iframe
+            this.createConnectionListeners(iframe);
+            // Setting up video/audio frame event listeners from the iframe
+            this.createFrameListeners(iframe);
 
 
             // Waiting for vdo.ninja room to send an iframe message, to then call it loaded
@@ -610,8 +735,25 @@ var vdo = {
         }
 
         checkGuestLoaded(person) {
-            // Checking if all the load-checklist items are completed
-            if(person.loaded == false && person.loadChecklist.personConnected && person.loadChecklist.viewInfo && person.loadChecklist.streamTracks && person.loadChecklist.videoElement && person.loadChecklist.aspectRatio && person.loadChecklist.label) {
+            // IF a feed isn't supposed to be coming, just check everything but the video-related items
+            var primaryFeed = false;
+            if(!person.config.sendingVideo && !person.config.sendingAudio) {
+                if(person.loaded == false &&
+                    person.loadChecklist.personConnected &&
+                    person.loadChecklist.viewInfo) {
+
+                    }
+            }
+            
+            // Checking if all the load-checklist items are completed (this check includes primary feed being present)
+            if(person.loaded == false &&
+                person.loadChecklist.personConnected &&
+                person.loadChecklist.viewInfo &&
+                person.loadChecklist.streamTracks &&
+                person.loadChecklist.primaryFeed &&
+                person.loadChecklist.aspectRatio &&
+                person.loadChecklist.label) {
+
                 // The person has fully loaded in!
                 // Updating person data
                 person.loaded = true;
@@ -714,6 +856,8 @@ var vdo = {
                 personConnected: false,
                 viewInfo: false,
                 streamTracks: false,
+                primaryFeed: false,
+                screenShareFeed: false,
                 videoElement: false,
                 aspectRatio: false,
                 label: false
@@ -852,7 +996,7 @@ class iventLissener {
     }
 }
 
-// Event system for lissening to Iframe API messages, and calling any custom functions who are lissening to the messages
+// List of events lissening to Iframe API messages, and calling any custom functions who are lissening to the messages
 var iframeEventCallbacks = [];
 
 
@@ -887,5 +1031,3 @@ if(!eventer) {
         }
     });
 }
-
-// export { Room, vdo };

@@ -7,11 +7,12 @@ function openInspSection(button) {
 
 
 // Global variables
+var activeViewID = undefined;
 var views = {
     av8v1a: {
         viewtype: "vdoroom",
         roomData: {
-            name: "testing1234"
+            name: "testing1234TWO"
         }
     }
 };
@@ -39,21 +40,28 @@ function removeViewButton(viewID) {
 }
 
 
-// Loads the view into the viewbox
-function loadView(button) {
-    // Checking if there is a view id attribute
-    var vid = button.getAttribute("data-viewid");
-    if(vid) {
-        // Finding the view
-        if(views[vid]) {
-            // If the view is a vdo.ninja room
-            if(views[vid].viewtype === "vdoroom") {
-                // load the room based on data from the roomObject
-                console.log("Loading vdo.ninja room " + vid)
-            }
-        }else {
-            console.error("View ID '" + vid + "' wasn't found as a view. There was a problem, and so didn't load the view.")
+function setCurrentView(viewID) {
+    // Finding the view
+    if(views[viewID]) {
+        // If the view is a vdo.ninja room
+        if(views[viewID].viewtype === "vdoroom") {
+            activeViewID = viewID;
+            // clicking button to load that view (the button click then calls "loadViewFromBTN")
+            document.querySelector('button[data-viewid="' + viewID + '"').click()
         }
+    }else {
+        console.error("View ID '" + viewID + "' wasn't found as a view. There was a problem, and so didn't load the view.")
+    }
+}
+
+
+// Loads the view into the viewbox
+function loadViewFromBTN(button) {
+    // Checking if there is a view id attribute
+    var viewID = button.getAttribute("data-viewid");
+    if(viewID) {
+        console.log("Loading view " + viewID)
+        // Code to set a view to be active
     }else {
         console.error("Can't load view without the button having a 'data-viewid' attribute. Didn't load view.")
     }

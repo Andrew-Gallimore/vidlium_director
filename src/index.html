@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/director/css/director-function.css">
     <link rel="stylesheet" href="/director/css/btn-styles.css">
     <link rel="stylesheet" href="/director/css/alerts.css">
+    
+    <link rel="stylesheet" href="/director/css/vdowrapper.css">
 </head>
 <body>
     <nav class="top-nav">
@@ -69,7 +71,7 @@
                         <h1>Rooms</h1>
                         <div class="list rooms">
                             <template>
-                                <button onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                                <button onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadViewFromBTN(this)">
                                     <h3>Name Error</h3>
                                     <div class="sending">
                                         <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
@@ -77,7 +79,7 @@
                                 </button>
                             </template>
                             
-                            <button data-viewid="av8v1a" class="active" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadView(this)">
+                            <button data-viewid="av8v1a" class="active" onclick="clickOfButtons(this, '.all-controls .left-panel .list'); loadViewFromBTN(this)">
                                 <h3>Room 1</h3>
                                 <div class="sending">
                                     <img width="48" height="48" src="https://img.icons8.com/B8B8B8/material-rounded/48/tv-show.png" alt="tv-show"/>
@@ -181,6 +183,11 @@
                     </div>
                     <div class="video-grid scrollbar--dark">
                         <div class="scroll">
+                            <template>
+                                <div class="person">
+                                    <div class="video"></div>
+                                </div>
+                            </template>
                             <div class="person">
                                 <div class="video one">1</div>
                             </div>
@@ -513,10 +520,19 @@
                 // Filtering the events by if they are for the particular iframe or not
                 if(iframeEventCallbacks[i].iframe !== false) {
                     if(e.source === iframeEventCallbacks[i].iframe.contentWindow) {
+
+                        if(e.data.kind !== "video" && e.data.kind !== "audio") {
+                            if(e.data.action !== "view-stats-updated" && e.data.stats === undefined) {
+                                if(e.data.streamIDs === undefined) {
+                                    // console.log("Window event")
+                                    // // console.log(e)
+                                    // console.log(e.data)
+                                }
+                            }
+                        }
+
                         iframeEventCallbacks[i].callback(e, iframeEventCallbacks[i].data);
                     }
-                }else {
-                    iframeEventCallbacks[i].callback(e, iframeEventCallbacks[i].data);
                 }
 
             }

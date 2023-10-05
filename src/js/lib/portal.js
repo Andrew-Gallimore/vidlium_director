@@ -106,11 +106,13 @@ var Portal = {
                         if(message.dataReceived.value.rooms.length > 0) {
                             // Adding parts of config to db
                             Portal.db.rooms = message.dataReceived.value.rooms;
-
-                            Portal.dispatch("updated-rooms");
                         }
                         
                         Portal.dispatch("recive-full-config");
+
+                        if(message.dataReceived.value.rooms.length > 0) {
+                            Portal.dispatch("updated-rooms");
+                        }
                     }
                 }
             }else if(message.dataReceived.action === "roomsAdded") {
