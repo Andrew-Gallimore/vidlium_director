@@ -185,6 +185,7 @@ body {
 .top-nav .center {
     display: flex;
     flex-direction: row;
+    height: var(--top-nav-height);
 }
 .top-nav ul {
     display: flex;

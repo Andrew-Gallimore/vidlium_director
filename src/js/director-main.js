@@ -238,12 +238,12 @@ function generateVdoRoom(roomData) {
         console.log("Person joining event!")
         console.log(person)
     })
-    // When the primary video element is created for the person
-    room.on("primary-video-created", e => {
-        // e.preventDefault();
-        console.log("Primary video created event!")
-        console.log(e)
-    })
+    // // When the primary video element is created for the person
+    // room.on("primary-video-created", e => {
+    //     // e.preventDefault();
+    //     console.log("Primary video created event!")
+    //     console.log(e)
+    // })
     // When a screenshare video element is created for the person
     room.on("screenshare-video-created", e => {
         // e.preventDefault();
@@ -257,14 +257,16 @@ function generateVdoRoom(roomData) {
         console.log(person)
         person.addToScene();
 
-        person.primaryFeed.classList.add("video")
-        person.primaryFeed.setAttribute("aspectratio", person.config.aspectRatio)
+        if(person.feeds.hasPrimary) {
+            person.feeds.primaryFeed.classList.add("video")
+            person.feeds.primaryFeed.setAttribute("aspectratio", person.config.aspectRatio)
 
-        var temp = document.createElement("div")
-        temp.classList.add("person");
-        temp.appendChild(person.primaryFeed)
+            var temp = document.createElement("div")
+            temp.classList.add("person");
+            temp.appendChild(person.feeds.primaryFeed)
 
-        document.querySelector(".page.room .scroll").appendChild(temp)
+            document.querySelector(".page.room .scroll").appendChild(temp)
+        }
     })
     
     room.on("person-left", e => {

@@ -92,6 +92,7 @@ var vdo = {
                 parent: this //I need to pass in the Room class as part of the data because otherwise 'this' is the iventLissener
             }, iframe);
             ivents.on((e, data) => {
+                console.log(e.data)
                 // Guest related lisseners for events from iframe
                 if(e.data.action === "director-connected") {
                     //TODO: Check with steve if there is a reason this event doesn't fire
@@ -282,7 +283,7 @@ var vdo = {
 	                testingTime = date.getTime()
                     // I have seen delays to reciving the audio/video tracks only be between 1-2 and 40-50-ish
                     setTimeout(() => {
-                        // After 100ms the video & audio streams are likely loaded
+                        // After 150ms the video & audio streams are likely loaded
                         console.log("Finished loading tracks? " + e.data.streamID)
                         data.parent.getPeople({streamID: e.data.streamID}, people => {
                             if(people) {
@@ -297,7 +298,7 @@ var vdo = {
                                 }
 
                                 // Updating the checklist for if the guest is fully joined
-                                person.loadChecklist.streamTracks = true;
+                                person.loadChecklist.knowFeedTracks = true;
                                 data.parent.checkGuestLoaded(person);
                             }
                         })
@@ -330,6 +331,36 @@ var vdo = {
                             people[0].config.sendingAudio = true;
                         }
                     })
+                }else if(e.data.action === "remote-video-mute-state") {
+                    // The VIDEO mute state sent by VDO.ninja API intialy when someone is joining
+                    data.parent.getPeople({streamID: e.data.streamID}, people => {
+                        if(people) {
+                            var person = people[0];
+
+                            // Applying the state
+                            person.config.sendingVideo = e.data.value;
+
+                            // Setting a little delay so that the other "remote-mute-state" message can come in too (they come at same time-ish usually)
+                            setTimeout(() => {
+                                person.loadChecklist.knowFeedTracks = true;
+                            }, 100, person);
+                        }
+                    });
+                }else if(e.data.action === "remote-mute-state") {
+                    // The AUDIO mute state sent by VDO.ninja API intialy when someone is joining
+                    data.parent.getPeople({streamID: e.data.streamID}, people => {
+                        if(people) {
+                            var person = people[0];
+
+                            // Applying the state
+                            person.config.sendingAudio = e.data.value;
+
+                            // Setting a little delay so that the other "remote-video-mute-state" message can come in too (they come at same time-ish usually)
+                            setTimeout(() => {
+                                person.loadChecklist.knowFeedTracks = true;
+                            }, 100, person);
+                        }
+                    });
                 }else if(e.data.action === "aspect-ratio") {
                     data.parent.getPeople({streamID: e.data.streamID}, people => {
                         if(people) {
@@ -509,7 +540,7 @@ var vdo = {
             });
         }
 
-        // 'media' and 'trackID' is only needed for the "data-feed" format
+        // 'media' and 'trackID' arguments are only needed for the "data-feed" format
         buildPersonVideo(streamID, format, media, trackID) {
             if(format === "data-feed") {
                 console.log("Made Video Element in custom class")
@@ -536,17 +567,21 @@ var vdo = {
                         if(person.config.aspectRatio) {
                             finalELem.style.aspectRatio = person.config.aspectRatio;
                         }
-                        
-                        // Sending out event that the video is created
-                        this.dispatch("primary-video-created", {
-                            personObject: person,
-                            videoElement: finalELem
-                        });
 
                         // This automatically overwites the primary video if there is already one created (likely an iframe type)
                         // Updating the checklist for if the guest is fully joined
                         person.loadChecklist.primaryFeed = true;
-                        person.primaryFeed = finalELem;
+                        person.feeds.hasPrimary = true;
+                        person.feeds.primaryFeed = finalELem;
+
+                        if(person.loaded) {
+                            // Sending out event that the video is created
+                            this.dispatch("primary-video-created", {
+                                personObject: person,
+                                videoElement: person.feeds.primaryFeed
+                            });
+                        }
+
                         this.checkGuestLoaded(person);
 
                     }else if(streamID.slice(-2) === ":s") {
@@ -564,17 +599,21 @@ var vdo = {
                                 if(person.config.aspectRatio) {
                                     finalELem.style.aspectRatio = person.config.aspectRatio;
                                 }
-                                
-                                // Sending out event that the video is created
-                                this.dispatch("screenshare-video-created", {
-                                    personObject: person,
-                                    videoElement: finalELem
-                                });
 
                                 // This automatically overwites the primary video if there is already one created (likely an iframe type)
                                 // Updating the checklist for if the guest is fully joined
                                 person.loadChecklist.screenShareFeed = true;
-                                person.screenShareFeed = finalELem;
+                                person.feeds.hasScreenshare = true;
+                                person.feeds.screenShareFeed = finalELem;
+
+                                if(person.loaded) {
+                                    // Sending out event that the video is created
+                                    this.dispatch("screenshare-video-created", {
+                                        personObject: person,
+                                        videoElement: person.feeds.screenShareFeed
+                                    });
+                                }
+
                                 this.checkGuestLoaded(person);
                             }
                         })
@@ -586,7 +625,7 @@ var vdo = {
                         var person = people[0];
 
                         // Checking that there isn't already a primary feed
-                        if(person.loadChecklist.streamTracks && !person.loadChecklist.primaryFeed) {
+                        if(person.loadChecklist.knowFeedTracks && !person.loadChecklist.primaryFeed) {
                             // Making the person's video from an iframe solo view
                             console.log("Made their feed from iframe " + streamID)
 
@@ -605,14 +644,17 @@ var vdo = {
                                 finalELem.style.aspectRatio = person.config.aspectRatio;
                             }
 
-                            person.primaryFeed = finalELem;
+                            person.feeds.hasPrimary = true;
+                            person.feeds.primaryFeed = finalELem;
                             person.loadChecklist.primaryFeed = true;
 
-                            // Sending out event that the video is created
-                            this.dispatch("primary-video-created", {
-                                personObject: person,
-                                videoElement: person.primaryFeed
-                            });
+                            if(person.loaded) {
+                                // Sending out event that the video is created
+                                this.dispatch("primary-video-created", {
+                                    personObject: person,
+                                    videoElement: person.feeds.primaryFeed
+                                });
+                            }
                         }
 
                         // Updating the checklist for if the guest is fully joined
@@ -624,7 +666,7 @@ var vdo = {
                                 var person = people[0];
 
                                 // Checking that there isn't already a primary feed
-                                if(person.loadChecklist.streamTracks && !person.loadChecklist.screenshareFeed) {
+                                if(person.loadChecklist.knowFeedTracks && !person.loadChecklist.screenshareFeed) {
                                     // Making the person's video from an iframe solo view
                                     console.log("Made their feed from iframe " + streamID)
 
@@ -643,14 +685,17 @@ var vdo = {
                                         finalELem.style.aspectRatio = person.config.aspectRatio;
                                     }
 
-                                    person.screenShareFeed = finalELem;
+                                    person.feeds.hasScreenshare = true;
+                                    person.feeds.screenShareFeed = finalELem;
                                     person.loadChecklist.screenShareFeed = true;
 
-                                    // Sending out event that the video is created
-                                    this.dispatch("screenshare-video-created", {
-                                        personObject: person,
-                                        videoElement: person.screenShareFeed
-                                    });
+                                    if(person.loaded) {
+                                        // Sending out event that the video is created
+                                        this.dispatch("screenshare-video-created", {
+                                            personObject: person,
+                                            videoElement: person.feeds.screenShareFeed
+                                        });
+                                    }
                                 }
 
                                 // Updating the checklist for if the guest is fully joined
@@ -735,32 +780,32 @@ var vdo = {
         }
 
         checkGuestLoaded(person) {
-            // IF a feed isn't supposed to be coming, just check everything but the video-related items
-            var primaryFeed = false;
-            if(!person.config.sendingVideo && !person.config.sendingAudio) {
-                if(person.loaded == false &&
-                    person.loadChecklist.personConnected &&
-                    person.loadChecklist.viewInfo) {
-
-                    }
+            // Checking that VIDEO steps are completed (if they are sending video)
+            if(person.config.sendingAudio === undefined || person.config.sendingVideo === undefined) return false;
+            if(person.config.sendingAudio || person.config.sendingVideo) {
+                if( !person.loadChecklist.knowFeedTracks ||
+                    !person.loadChecklist.primaryFeed ||
+                    !person.loadChecklist.aspectRatio) {
+                    return false;
+                }
             }
-            
-            // Checking if all the load-checklist items are completed (this check includes primary feed being present)
-            if(person.loaded == false &&
-                person.loadChecklist.personConnected &&
-                person.loadChecklist.viewInfo &&
-                person.loadChecklist.streamTracks &&
-                person.loadChecklist.primaryFeed &&
-                person.loadChecklist.aspectRatio &&
-                person.loadChecklist.label) {
 
-                // The person has fully loaded in!
-                // Updating person data
+            // Checking that the BASIC steps are completed
+            if( !person.loadChecklist.personConnected ||
+                !person.loadChecklist.viewInfo ||
+                !person.loadChecklist.label) {
+                return false;
+            }
+
+            // Checking if we have already sent the loaded event
+            if(person.loaded == false) {
+                // Updating person data that they are fully loaded
                 person.loaded = true;
-
                 // Calling a guest loaded event
                 this.dispatch("person-connected", person)
             }
+
+            return true;
         }
 
         loadLabels() {
@@ -842,20 +887,23 @@ var vdo = {
                 this.config.type = options.type;
             }
 
+            this.feeds = {
+                hasPrimary: false,
+                primaryFeed: undefined,
+                hasScreenshare: false,
+                screenshareFeed: undefined,
+            }
+
 
             // Group & Scene lists for guest
             this.groups = [];
             this.scenes = [];
 
-            // A place for the video elements connected to the person
-            this.videoElements = [];
-
-
             // For while the guest is loading
             this.loadChecklist = {
                 personConnected: false,
                 viewInfo: false,
-                streamTracks: false,
+                knowFeedTracks: false,
                 primaryFeed: false,
                 screenShareFeed: false,
                 videoElement: false,
