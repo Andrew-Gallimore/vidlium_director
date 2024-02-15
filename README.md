@@ -102,7 +102,7 @@ Additional information on the devcert, the system used for setting up the SSL an
 
 ## Contributing
 
-Vidlium is an open-source and free project. We are committed to a fully transparent development process and highly appreciate any contributions. Whether you are helping us fix bugs, proposing new features, improving our documentation or spreading the word - we would love to have you as a part of the Amplication community.
+Vidlium is an open-source and free project. We are committed to a fully transparent development process and highly appreciate any contributions. Whether you are helping us fix bugs, proposing new features, improving our documentation or spreading the word - we would love to have you as a part of the Vidlium community.
 
 - Bug Report: If you run into an issue while using Vidlium, or are seeing unexpected behavior from the code, please create a bug report.
 
