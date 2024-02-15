@@ -112,5 +112,5 @@ Vidlium is an open-source and free project. We are committed to a fully transpar
 
 A large part of this project is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) license. Essentially stating that the code is required to stay open source. Be sure to check specific files, though, as some may come with a different lisense specific to that code.
 
-> README.md last updated 8/26/2023
+> README.md last updated 2/15/2024
 
